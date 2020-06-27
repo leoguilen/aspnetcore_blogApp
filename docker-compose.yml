@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  techblog-api:
+    build: Server/src/Medium.App/
+    restart: always
+    ports: 
+      - "7000:80"
+    networks: 
+      - medium-net
+
+networks:
+  medium-net:
+    name: medium-net
