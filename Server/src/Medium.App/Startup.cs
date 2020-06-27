@@ -1,4 +1,5 @@
 using Medium.App.Extensions;
+using Medium.App.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,20 @@ namespace Medium.App
             app.UseRouting();
 
             app.UseAuthorization();
+
+            #region Swagger Configuring
+
+            var swaggerOptions = new SwaggerOptions();
+            Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
+
+            app.UseSwagger(sw => sw.RouteTemplate = swaggerOptions.JsonRoute);
+            app.UseSwaggerUI(sw =>
+            {
+                sw.RoutePrefix = "";
+                sw.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description);
+            });
+
+            #endregion
 
             app.UseEndpoints(endpoints =>
             {
