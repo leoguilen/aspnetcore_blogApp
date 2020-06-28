@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medium.UnitTest", "test\Med
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medium.Core", "src\Medium.Core\Medium.Core.csproj", "{797CACBB-A324-4DAC-AFF5-5A9BBDAB0A68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medium.Infrastructure", "src\Medium.Infrastructure\Medium.Infrastructure.csproj", "{B00F5B39-1563-49FC-9077-6F969EB2B326}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{797CACBB-A324-4DAC-AFF5-5A9BBDAB0A68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{797CACBB-A324-4DAC-AFF5-5A9BBDAB0A68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{797CACBB-A324-4DAC-AFF5-5A9BBDAB0A68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B00F5B39-1563-49FC-9077-6F969EB2B326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B00F5B39-1563-49FC-9077-6F969EB2B326}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B00F5B39-1563-49FC-9077-6F969EB2B326}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B00F5B39-1563-49FC-9077-6F969EB2B326}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{0C3B5F92-7A15-4E4E-846B-FBE26724FD85} = {5609EA67-F220-405D-AAFE-23D177BB8D04}
 		{0A507B2C-4AAD-4BFD-9C30-2A7694BD898D} = {5609EA67-F220-405D-AAFE-23D177BB8D04}
 		{797CACBB-A324-4DAC-AFF5-5A9BBDAB0A68} = {75B16FC5-7B0D-4F66-9D49-3385CD5ED967}
+		{B00F5B39-1563-49FC-9077-6F969EB2B326} = {75B16FC5-7B0D-4F66-9D49-3385CD5ED967}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A162559F-9E63-4969-BDE1-1A3E90121EB3}
