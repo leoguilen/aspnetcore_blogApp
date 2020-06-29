@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Medium.Core.Domain
 {
-    public abstract class Entity
+    public abstract class BaseEntity
     {
         [Key]
         public Guid Id { get; set; }

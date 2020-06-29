@@ -60,6 +60,18 @@ namespace Medium.Core.Common.Builder
             return this;
         }
 
+        public AuthorBuilder WithBio(string bio)
+        {
+            _author.Bio = bio;
+            return this;
+        }
+
+        public AuthorBuilder WithAvatar(string avatar)
+        {
+            _author.Avatar = avatar;
+            return this;
+        }
+
         public AuthorBuilder WithDeactivated(bool deactivated)
         {
             _author.Deactivated = deactivated;

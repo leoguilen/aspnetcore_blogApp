@@ -24,6 +24,8 @@ namespace Medium.UnitTest.Domain
                 Hash = faker.Random.AlphaNumeric(6),
                 Email = faker.Person.Email,
                 ConfirmedEmail = faker.Random.Bool(),
+                Bio = faker.Lorem.Paragraphs(),
+                Avatar = faker.Person.Avatar,
                 Deactivated = faker.Random.Bool(),
                 Deleted = faker.Random.Bool(),
                 CreatedAt = DateTime.Now.DefaultFormat(),
@@ -40,6 +42,8 @@ namespace Medium.UnitTest.Domain
                 Hash = expectedAuthor.Hash,
                 Email = expectedAuthor.Email,
                 ConfirmedEmail = expectedAuthor.ConfirmedEmail,
+                Bio = expectedAuthor.Bio,
+                Avatar = expectedAuthor.Avatar,
                 Deactivated = expectedAuthor.Deactivated,
                 Deleted = expectedAuthor.Deleted,
             };
@@ -61,6 +65,8 @@ namespace Medium.UnitTest.Domain
                 Hash = faker.Random.AlphaNumeric(6),
                 Email = faker.Person.Email,
                 ConfirmedEmail = faker.Random.Bool(),
+                Bio = faker.Lorem.Paragraphs(),
+                Avatar = faker.Person.Avatar,
                 Deactivated = faker.Random.Bool(),
                 Deleted = faker.Random.Bool(),
                 CreatedAt = DateTime.Now.DefaultFormat(),
@@ -76,6 +82,8 @@ namespace Medium.UnitTest.Domain
                 .WithHash(expectedAuthor.Hash)
                 .WithEmail(expectedAuthor.Email)
                 .WithConfirmedEmail(expectedAuthor.ConfirmedEmail)
+                .WithBio(expectedAuthor.Bio)
+                .WithAvatar(expectedAuthor.Avatar)
                 .WithDeactivated(expectedAuthor.Deactivated)
                 .WithDeleted(expectedAuthor.Deleted)
                 .Build();

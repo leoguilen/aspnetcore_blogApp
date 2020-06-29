@@ -3,7 +3,7 @@ using System;
 
 namespace Medium.Core.Domain
 {
-    public class Author : Entity
+    public class Author : BaseEntity
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -12,6 +12,8 @@ namespace Medium.Core.Domain
         public string Hash { get; set; }
         public string Email { get; set; }
         public bool ConfirmedEmail { get; set; }
+        public string Bio { get; set; }
+        public string Avatar { get; set; }
         public bool Deactivated { get; set; }
         public bool Deleted { get; set; }
 

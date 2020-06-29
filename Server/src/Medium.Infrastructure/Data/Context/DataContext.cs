@@ -1,7 +1,7 @@
 ﻿using Medium.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Medium.Infrastructure.Context
+namespace Medium.Infrastructure.Data.Context
 {
     public class DataContext : DbContext
     {
