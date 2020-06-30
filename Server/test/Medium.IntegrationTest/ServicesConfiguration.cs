@@ -1,5 +1,8 @@
-﻿using Medium.Infrastructure.Data.Context;
+﻿using Medium.Core.UnitOfWork;
+using Medium.Infrastructure.Data.Context;
+using Medium.Infrastructure.unitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -16,7 +19,12 @@ namespace Medium.IntegrationTest
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .UseInternalServiceProvider(new ServiceCollection()
                     .AddEntityFrameworkInMemoryDatabase()
-                    .BuildServiceProvider()));
+                    .BuildServiceProvider())
+                .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+                .EnableSensitiveDataLogging()
+                .EnableServiceProviderCaching(false));
+
+            serviceProvider.AddSingleton<IUnitOfWork, UnitOfWork>();
 
             return serviceProvider
                 .BuildServiceProvider();

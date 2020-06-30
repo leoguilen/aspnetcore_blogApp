@@ -6,6 +6,6 @@ namespace Medium.Core.UnitOfWork
     public interface IUnitOfWork
     {
         IAuthorRepository Authors { get; }
-        Task Commit();
+        Task<int> Commit();
     }
 }
