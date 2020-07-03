@@ -67,6 +67,23 @@ namespace Medium.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b3752e54-0207-4cf9-ab39-2b33df08c5c9"),
+                            ConfirmedEmail = true,
+                            CreatedAt = new DateTime(2020, 7, 2, 21, 16, 0, 0, DateTimeKind.Unspecified),
+                            Deactivated = false,
+                            Deleted = false,
+                            Email = "admin.master@email.com",
+                            FirstName = "Administrador",
+                            Hash = "af808e",
+                            LastName = "Master",
+                            Password = "Admin123!",
+                            UpdatedAt = new DateTime(2020, 7, 2, 21, 16, 0, 0, DateTimeKind.Unspecified),
+                            Username = "admin.master"
+                        });
                 });
 #pragma warning restore 612, 618
         }

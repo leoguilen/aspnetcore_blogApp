@@ -1,4 +1,5 @@
 ﻿using Medium.Core.Domain;
+using Medium.Infrastructure.Data.Context.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -23,6 +24,11 @@ namespace Medium.Infrastructure.Data.Context
                 optionsBuilder.UseSqlServer(_configuration
                     .GetConnectionString("DefaultConnection"));
             }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new AuthorConfiguration());
         }
     }
 }
