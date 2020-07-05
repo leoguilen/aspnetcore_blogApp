@@ -1,3 +1,4 @@
+using AutoMapper;
 using Medium.App.Extensions;
 using Medium.App.Options;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +22,7 @@ namespace Medium.App
         public void ConfigureServices(IServiceCollection services)
         {
             services.InstallServicesInAssembly(Configuration);
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
