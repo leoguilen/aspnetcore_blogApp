@@ -21,7 +21,7 @@ namespace Medium.UnitTest.Domain
                 LastName = faker.Person.LastName,
                 Username = faker.Person.UserName,
                 Password = faker.Internet.Password(),
-                Hash = faker.Random.AlphaNumeric(6),
+                Salt = faker.Random.AlphaNumeric(6),
                 Email = faker.Person.Email,
                 ConfirmedEmail = faker.Random.Bool(),
                 Bio = faker.Lorem.Paragraphs(),
@@ -39,7 +39,7 @@ namespace Medium.UnitTest.Domain
                 LastName = expectedAuthor.LastName,
                 Username = expectedAuthor.Username,
                 Password = expectedAuthor.Password,
-                Hash = expectedAuthor.Hash,
+                Salt = expectedAuthor.Salt,
                 Email = expectedAuthor.Email,
                 ConfirmedEmail = expectedAuthor.ConfirmedEmail,
                 Bio = expectedAuthor.Bio,
@@ -62,7 +62,7 @@ namespace Medium.UnitTest.Domain
                 LastName = faker.Person.LastName,
                 Username = faker.Person.UserName,
                 Password = faker.Internet.Password(),
-                Hash = faker.Random.AlphaNumeric(6),
+                Salt = faker.Random.AlphaNumeric(6),
                 Email = faker.Person.Email,
                 ConfirmedEmail = faker.Random.Bool(),
                 Bio = faker.Lorem.Paragraphs(),
@@ -79,7 +79,7 @@ namespace Medium.UnitTest.Domain
                 .WithLastName(expectedAuthor.LastName)
                 .WithUsername(expectedAuthor.Username)
                 .WithPassword(expectedAuthor.Password)
-                .WithHash(expectedAuthor.Hash)
+                .WithSalt(expectedAuthor.Salt)
                 .WithEmail(expectedAuthor.Email)
                 .WithConfirmedEmail(expectedAuthor.ConfirmedEmail)
                 .WithBio(expectedAuthor.Bio)

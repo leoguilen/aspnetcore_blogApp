@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20200703001644_InitialStructure_AddedAuthorTable.cs" />
+    <Compile Remove="Data\Migrations\20200703001644_InitialStructure_AddedAuthorTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200705190858_InitialMigration.cs" />
+    <Compile Remove="Data\Migrations\20200705190858_InitialMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200705191034_InitialMigration.cs" />
+    <Compile Remove="Data\Migrations\20200705191034_InitialMigration.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>

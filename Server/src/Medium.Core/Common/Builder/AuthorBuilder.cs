@@ -42,9 +42,9 @@ namespace Medium.Core.Common.Builder
             return this;
         }
 
-        public AuthorBuilder WithHash(string hash)
+        public AuthorBuilder WithSalt(string salt)
         {
-            _author.Hash = hash;
+            _author.Salt = salt;
             return this;
         }
 

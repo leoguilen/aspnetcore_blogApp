@@ -47,7 +47,8 @@ namespace Medium.App.Controllers.V1
             if (author == null)
                 return NotFound();
 
-            var authorResponse = _mapper.Map<AuthorResponse>(author);
+            var authorResponse = new Response<AuthorResponse>(
+                _mapper.Map<AuthorResponse>(author));
 
             return Ok(authorResponse);
         }
@@ -65,7 +66,8 @@ namespace Medium.App.Controllers.V1
 
             var locationUrl = _uriService.GetAuthorUri(author.Id.ToString());
 
-            return Created(locationUrl, _mapper.Map<AuthorResponse>(author));
+            return Created(locationUrl, new Response<AuthorResponse>(
+                _mapper.Map<AuthorResponse>(author)));
         }
 
         [HttpPut(ApiRoutes.Authors.Update)]
@@ -92,7 +94,8 @@ namespace Medium.App.Controllers.V1
             if (!updated)
                 return NotFound();
 
-            var authorResponse = _mapper.Map<AuthorResponse>(author);
+            var authorResponse = new Response<AuthorResponse>(
+                _mapper.Map<AuthorResponse>(author));
 
             return Ok(authorResponse);
         }

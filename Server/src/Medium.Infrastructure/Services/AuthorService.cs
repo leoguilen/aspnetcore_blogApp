@@ -1,6 +1,7 @@
 ﻿using Medium.Core.Domain;
 using Medium.Core.Services;
 using Medium.Core.UnitOfWork;
+using Medium.Infrastructure.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,12 @@ namespace Medium.Infrastructure.Services
 
             if (newAuthor != null)
                 return false;
+
+            string salt = SecurePasswordHasher.CreateSalt(8);
+            string hashedPassword = SecurePasswordHasher.GenerateHash(author.Password, salt);
+
+            author.Password = hashedPassword;
+            author.Salt = salt;
 
             await _unitOfWork.Authors.CreateAsync(author);
             var created = await _unitOfWork.Commit();

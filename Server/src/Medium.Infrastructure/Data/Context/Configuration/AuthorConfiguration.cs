@@ -1,4 +1,5 @@
 ﻿using Medium.Core.Domain;
+using Medium.Infrastructure.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,6 +14,8 @@ namespace Medium.Infrastructure.Data.Context.Configuration
             builder.Property(x => x.Bio).IsRequired(false);
             builder.Property(x => x.Avatar).IsRequired(false);
 
+            var salt = SecurePasswordHasher.CreateSalt(8);
+
             builder.HasData
             (
                 new Author 
@@ -21,8 +24,8 @@ namespace Medium.Infrastructure.Data.Context.Configuration
                     FirstName = "Administrador",
                     LastName = "Master",
                     Username = "admin.master",
-                    Password = "Admin123!",
-                    Hash = "af808e",
+                    Password = SecurePasswordHasher.GenerateHash("Admin2020#", salt),
+                    Salt = salt,
                     Email = "admin.master@email.com",
                     ConfirmedEmail = true,
                     Deactivated = false,
