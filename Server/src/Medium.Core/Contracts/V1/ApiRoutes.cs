@@ -1,4 +1,4 @@
-﻿namespace Medium.App.Contracts.V1
+﻿namespace Medium.Core.Contracts.V1
 {
     public static class ApiRoutes
     {

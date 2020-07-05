@@ -1,4 +1,4 @@
-﻿namespace Medium.App.Contracts.V1.Request
+﻿namespace Medium.Core.Contracts.V1.Request
 {
     public class UpdateAuthorRequest
     {

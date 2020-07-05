@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Medium.App\Medium.App.csproj" />
     <ProjectReference Include="..\..\src\Medium.Core\Medium.Core.csproj" />
     <ProjectReference Include="..\Medium.IntegrationTest\Medium.IntegrationTest.csproj" />
   </ItemGroup>

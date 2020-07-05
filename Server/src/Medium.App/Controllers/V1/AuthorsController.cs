@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using Medium.App.Contracts.V1;
-using Medium.App.Contracts.V1.Request;
-using Medium.App.Contracts.V1.Response;
+using Medium.Core.Common.Builder;
+using Medium.Core.Contracts.V1;
+using Medium.Core.Contracts.V1.Request;
+using Medium.Core.Contracts.V1.Response;
 using Medium.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,11 +15,13 @@ namespace Medium.App.Controllers.V1
     public class AuthorsController : ControllerBase
     {
         private readonly IAuthorService _authorService;
+        private readonly IUriService _uriService;
         private readonly IMapper _mapper;
 
-        public AuthorsController(IAuthorService authorService, IMapper mapper)
+        public AuthorsController(IAuthorService authorService, IUriService uriService, IMapper mapper)
         {
             _authorService = authorService;
+            _uriService = uriService;
             _mapper = mapper;
         }
 
@@ -51,7 +54,23 @@ namespace Medium.App.Controllers.V1
         [HttpPost(ApiRoutes.Authors.Create)]
         public async Task<IActionResult> Create([FromBody] CreateAuthorRequest request)
         {
-            return Ok("Created");
+            var newAuthorId = Guid.NewGuid();
+            var author = new AuthorBuilder()
+                .WithId(newAuthorId)
+                .WithFirstName(request.FirstName)
+                .WithLastName(request.LastName)
+                .WithUsername(request.Username)
+                .WithPassword(request.Password)
+                .WithEmail(request.Email)
+                .WithBio(request.Bio)
+                .WithAvatar(request.Avatar)
+                .Build();
+
+            await _authorService.CreateAuthorAsync(author).ConfigureAwait(false);
+
+            var locationUrl = _uriService.GetAuthorUri(author.Id.ToString());
+
+            return Created(locationUrl, _mapper.Map<AuthorResponse>(author));
         }
 
         [HttpPut(ApiRoutes.Authors.Update)]
