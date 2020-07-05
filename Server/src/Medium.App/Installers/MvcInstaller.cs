@@ -11,7 +11,6 @@ namespace Medium.App.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers();
-            services.AddSingleton(configuration);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IUriService>(provider =>
             {

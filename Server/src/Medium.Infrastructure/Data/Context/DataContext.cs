@@ -1,19 +1,12 @@
 ﻿using Medium.Core.Domain;
 using Medium.Infrastructure.Data.Context.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Medium.Infrastructure.Data.Context
 {
     public class DataContext : DbContext
     {
-        private readonly IConfiguration _configuration;
-
-        public DataContext(DbContextOptions<DataContext> options,
-            IConfiguration configuration) : base(options) 
-        {
-            _configuration = configuration;
-        }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Author> Authors { get; set; }
 
@@ -21,8 +14,7 @@ namespace Medium.Infrastructure.Data.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(_configuration
-                    .GetConnectionString("DefaultConnection"));
+                optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=Medium;User=sa;Password=Master2020#");
             }
         }
 
