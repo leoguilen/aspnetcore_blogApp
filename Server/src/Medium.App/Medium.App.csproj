@@ -21,11 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\Medium.Infrastructure\Medium.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Medium.Infrastructure\Medium.Infrastructure.csproj" />
+    <Folder Include="Contracts\V1\Response\" />
   </ItemGroup>
 
 
