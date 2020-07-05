@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Medium.App.Extensions;
 using Medium.Core.Common.Builder;
 using Medium.Core.Contracts.V1;
 using Medium.Core.Contracts.V1.Request;
@@ -57,13 +58,7 @@ namespace Medium.App.Controllers.V1
             var newAuthorId = Guid.NewGuid();
             var author = new AuthorBuilder()
                 .WithId(newAuthorId)
-                .WithFirstName(request.FirstName)
-                .WithLastName(request.LastName)
-                .WithUsername(request.Username)
-                .WithPassword(request.Password)
-                .WithEmail(request.Email)
-                .WithBio(request.Bio)
-                .WithAvatar(request.Avatar)
+                .BuildAuthorByRequest(request)
                 .Build();
 
             await _authorService.CreateAuthorAsync(author).ConfigureAwait(false);
