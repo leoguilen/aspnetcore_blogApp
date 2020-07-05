@@ -76,13 +76,43 @@ namespace Medium.App.Controllers.V1
         [HttpPut(ApiRoutes.Authors.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid authorId, [FromBody] UpdateAuthorRequest request)
         {
-            return Ok("Updated");
+            var author = await _authorService
+                .GetAuthorByIdAsync(authorId)
+                .ConfigureAwait(false);
+
+            if (author == null) 
+                return NotFound();
+
+            author.FirstName = request.FirstName;
+            author.LastName = request.LastName;
+            author.Username = request.Username;
+            author.Email = request.Email;
+            author.Bio = request.Bio;
+            author.Avatar = request.Avatar;
+
+            var updated = await _authorService
+                .UpdateAuthorAsync(author)
+                .ConfigureAwait(false);
+
+            if (!updated)
+                return NotFound();
+
+            var authorResponse = _mapper.Map<AuthorResponse>(author);
+
+            return Ok(authorResponse);
         }
 
         [HttpDelete(ApiRoutes.Authors.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid authorId)
         {
-            return Ok("Deleted");
+            var deleted = await _authorService
+                .DeleteAuthorAsync(authorId)
+                .ConfigureAwait(false);
+
+            if (deleted)
+                return NoContent();
+
+            return NotFound();
         }
     }
 }
