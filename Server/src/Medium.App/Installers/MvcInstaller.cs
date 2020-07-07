@@ -1,4 +1,5 @@
-﻿using Medium.Core.Services;
+﻿using Medium.Core.Options;
+using Medium.Core.Services;
 using Medium.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +11,10 @@ namespace Medium.App.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
+            var jwtOptions = new JwtOptions();
+            configuration.Bind(nameof(JwtOptions), jwtOptions);
+            services.AddSingleton(jwtOptions);
+
             services.AddControllers();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IUriService>(provider =>

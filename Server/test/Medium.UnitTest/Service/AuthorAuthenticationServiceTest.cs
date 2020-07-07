@@ -1,13 +1,15 @@
 ﻿using Bogus;
 using FluentAssertions;
+using Medium.Core.Domain;
+using Medium.Core.Options;
+using Medium.Core.Repositories;
 using Medium.Core.UnitOfWork;
 using Medium.Infrastructure.Data.Context;
-using Medium.Infrastructure.Helpers;
+using Medium.Infrastructure.Services;
 using Medium.IntegrationTest;
 using Medium.IntegrationTest.Extensions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -22,14 +24,20 @@ namespace Medium.UnitTest.Service
 
         public AuthorAuthenticationServiceTest()
         {
-            var provider = ServicesConfiguration.Configure();
+            _faker = new Faker("pt_BR");
 
+            var provider = ServicesConfiguration.Configure();
             _dbContext = provider
                 .GetRequiredService<DataContext>()
                 .SeedTestData();
             _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-            _authenticationService = new AuthorAuthenticationService(_unitOfWork);
-            _faker = new Faker("pt_BR");
+            
+            _authenticationService = new AuthorAuthenticationService(_unitOfWork, 
+                new JwtOptions 
+                { 
+                    Secret = "Teste", 
+                    TokenLifetime = TimeSpan.FromMinutes(5) 
+                });
         }
 
         #region Login Tests
@@ -73,61 +81,20 @@ namespace Medium.UnitTest.Service
             authenticationResult.Errors.Should().BeNull();
         }
 
+        [Fact]
+        public async Task ShouldBeReturnedAuthenticationResultWithSuccessAndToken()
+        {
+            const string validEmail = "maria@email.com";
+            const string validPassword = "maria123";
+
+            var authenticationResult = await _authenticationService.LoginAsync(validEmail, validPassword);
+
+            authenticationResult.Should().BeOfType<AuthenticationResult>();
+            authenticationResult.Success.Should().BeTrue();
+            authenticationResult.Errors.Should().BeNull();
+            authenticationResult.Token.Should().NotBeNullOrEmpty();
+        }
+
         #endregion
-
-    }
-
-    public class AuthorAuthenticationService : IAuthorAuthenticationService
-    {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public AuthorAuthenticationService(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
-        public async Task<AuthenticationResult> LoginAsync(string email, string password)
-        {
-            var author = await _unitOfWork.Authors
-                .FindByConditionAsync(a => a.Email == email)
-                .Result.SingleOrDefaultAsync();
-
-            if (author == null)
-            {
-                return new AuthenticationResult
-                {
-                    Success = false,
-                    Errors = new[] { "User does not exist" }
-                };
-            }
-
-            bool isValidPassword = SecurePasswordHasher
-                .AreEqual(password, author.Password, author.Salt);
-
-            if (!isValidPassword)
-            {
-                return new AuthenticationResult
-                {
-                    Success = false,
-                    Errors = new[] { "Email/password combination is invalid" }
-                };
-            }
-
-            return new AuthenticationResult
-            {
-                Success = true
-            };
-        }
-    }
-
-    public interface IAuthorAuthenticationService
-    {
-        Task<AuthenticationResult> LoginAsync(string email, string password);
-    }
-
-    public class AuthenticationResult
-    {
-        public bool Success { get; set; }
-        public IEnumerable<string> Errors { get; set; }
     }
 }
