@@ -11,11 +11,11 @@ namespace Medium.Core.Domain
         public string Password { get; set; }
         public string Salt { get; set; }
         public string Email { get; set; }
-        public bool ConfirmedEmail { get; set; }
+        public bool ConfirmedEmail { get; set; } = false;
         public string Bio { get; set; }
         public string Avatar { get; set; }
-        public bool Deactivated { get; set; }
-        public bool Deleted { get; set; }
+        public bool Deactivated { get; set; } = false;
+        public bool Deleted { get; set; } = false;
 
         public Author()
         {
