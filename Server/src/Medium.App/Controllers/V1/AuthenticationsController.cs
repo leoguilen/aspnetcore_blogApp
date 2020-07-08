@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 
 namespace Medium.App.Controllers.V1
 {
+    /// <summary>
+    /// Endpoint responsible for authentication services
+    /// </summary>
     [ApiController]
+    [ApiVersion("1.0")]
     [AllowAnonymous]
     [Produces("application/json")]
     public class AuthenticationsController : ControllerBase
@@ -22,7 +26,7 @@ namespace Medium.App.Controllers.V1
 
         /// <summary>
         /// Register a new author in the system
-        /// </summary>
+        /// </summary> 
         /// <response code="200">Register a new author in the system</response>
         /// <response code="400">An error occurred when try register a new author in the system</response>
         [HttpPost(ApiRoutes.Authentication.Register)]
