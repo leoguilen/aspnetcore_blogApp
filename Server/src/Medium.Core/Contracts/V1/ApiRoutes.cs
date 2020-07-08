@@ -14,5 +14,12 @@
             public const string Update = Base + "/authors/{authorId}";
             public const string Delete = Base + "/authors/{authorId}";
         }
+
+        public static class Authentication
+        {
+            public const string Register = Base + "/auth/register";
+            public const string Login = Base + "/auth/login";
+            public const string ResetPassword = Base + "/auth/reset";
+        }
     }
 }
