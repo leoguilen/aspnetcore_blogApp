@@ -66,7 +66,12 @@ namespace Medium.Infrastructure.Services
                 };
             }
 
+            string salt = SecurePasswordHasher.CreateSalt(8);
+            string hashedPassword = SecurePasswordHasher.GenerateHash(author.Password, salt);
+
             author.Id = Guid.NewGuid();
+            author.Password = hashedPassword;
+            author.Salt = salt;
 
             await _unitOfWork.Authors.CreateAuthorAsync(author);
             var createdAuthor = await _unitOfWork.Commit();

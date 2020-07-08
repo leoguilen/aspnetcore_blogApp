@@ -1,6 +1,8 @@
-﻿using Medium.Core.Contracts.V1;
+﻿using AutoMapper;
+using Medium.Core.Contracts.V1;
 using Medium.Core.Contracts.V1.Request;
 using Medium.Core.Contracts.V1.Response;
+using Medium.Core.Domain;
 using Medium.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +20,12 @@ namespace Medium.App.Controllers.V1
     public class AuthenticationsController : ControllerBase
     {
         private readonly IAuthorAuthenticationService _authService;
+        private readonly IMapper _mapper;
 
-        public AuthenticationsController(IAuthorAuthenticationService authService)
+        public AuthenticationsController(IAuthorAuthenticationService authService, IMapper mapper)
         {
             _authService = authService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -34,7 +38,24 @@ namespace Medium.App.Controllers.V1
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
-            return Ok();
+            var author = _mapper.Map<Author>(request);
+
+            var authResponse = await _authService
+                .RegisterAsync(author)
+                .ConfigureAwait(false);
+
+            if(!authResponse.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = authResponse.Errors
+                });
+            }
+
+            return Ok(new AuthSuccessResponse 
+            {
+                Token = authResponse.Token
+            });
         }
     }
 }
