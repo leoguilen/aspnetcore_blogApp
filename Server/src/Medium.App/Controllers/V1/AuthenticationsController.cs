@@ -6,6 +6,7 @@ using Medium.Core.Domain;
 using Medium.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,11 +23,13 @@ namespace Medium.App.Controllers.V1
     {
         private readonly IAuthorAuthenticationService _authService;
         private readonly IMapper _mapper;
+        private readonly ILogger<AuthenticationsController> _logger;
 
-        public AuthenticationsController(IAuthorAuthenticationService authService, IMapper mapper)
+        public AuthenticationsController(IAuthorAuthenticationService authService, IMapper mapper, ILogger<AuthenticationsController> logger)
         {
             _authService = authService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         /// <summary>
@@ -56,6 +59,7 @@ namespace Medium.App.Controllers.V1
 
             if(!authResponse.Success)
             {
+                _logger.LogWarning("Authentication failed - {errors}", authResponse.Errors);
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = authResponse.Errors
