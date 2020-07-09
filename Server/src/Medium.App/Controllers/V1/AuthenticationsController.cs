@@ -6,6 +6,7 @@ using Medium.Core.Domain;
 using Medium.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Medium.App.Controllers.V1
@@ -38,6 +39,15 @@ namespace Medium.App.Controllers.V1
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
+            if (!ModelState.IsValid) 
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = ModelState.Values.SelectMany(x =>
+                        x.Errors.Select(e => e.ErrorMessage))
+                });
+            }
+
             var author = _mapper.Map<Author>(request);
 
             var authResponse = await _authService

@@ -1,8 +1,10 @@
-﻿using Medium.Core.Options;
+﻿using FluentValidation.AspNetCore;
+using Medium.Core.Options;
 using Medium.Core.Services;
 using Medium.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -18,7 +20,9 @@ namespace Medium.App.Installers
             configuration.Bind(nameof(JwtOptions), jwtOptions);
             services.AddSingleton(jwtOptions);
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>())
+                .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             // Add versionamento da API
             services.AddApiVersioning(options =>
