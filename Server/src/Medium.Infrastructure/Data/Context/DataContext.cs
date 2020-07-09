@@ -14,7 +14,7 @@ namespace Medium.Infrastructure.Data.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=Medium;User=sa;Password=Master2020#");
+                optionsBuilder.UseSqlServer("Data Source=localhost,1400;Initial Catalog=Medium;User=sa;Password=Master2020#");
             }
         }
 
