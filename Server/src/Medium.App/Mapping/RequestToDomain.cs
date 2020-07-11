@@ -8,7 +8,7 @@ namespace Medium.App.Mapping
     {
         public RequestToDomain()
         {
-            CreateMap<UserRegistrationRequest, Author>();
+            CreateMap<AuthorRegistrationRequest, Author>();
         }
     }
 }

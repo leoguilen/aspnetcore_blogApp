@@ -6,7 +6,6 @@ using Medium.Core.Domain;
 using Medium.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,26 +22,24 @@ namespace Medium.App.Controllers.V1
     {
         private readonly IAuthorAuthenticationService _authService;
         private readonly IMapper _mapper;
-        private readonly ILogger<AuthenticationsController> _logger;
 
-        public AuthenticationsController(IAuthorAuthenticationService authService, IMapper mapper, ILogger<AuthenticationsController> logger)
+        public AuthenticationsController(IAuthorAuthenticationService authService, IMapper mapper)
         {
             _authService = authService;
             _mapper = mapper;
-            _logger = logger;
         }
 
         /// <summary>
         /// Register a new author in the system
-        /// </summary> 
+        /// </summary>
         /// <response code="200">Register a new author in the system</response>
         /// <response code="400">An error occurred when try register a new author in the system</response>
         [HttpPost(ApiRoutes.Authentication.Register)]
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
-        public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
+        public async Task<IActionResult> Register([FromBody] AuthorRegistrationRequest request)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return BadRequest(new AuthFailedResponse
                 {
@@ -57,18 +54,74 @@ namespace Medium.App.Controllers.V1
                 .RegisterAsync(author)
                 .ConfigureAwait(false);
 
-            if(!authResponse.Success)
+            if (!authResponse.Success)
             {
-                _logger.LogWarning("Authentication failed - {errors}", authResponse.Errors);
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = authResponse.Errors
                 });
             }
 
-            return Ok(new AuthSuccessResponse 
+            return Ok(new AuthSuccessResponse
             {
                 Token = authResponse.Token
+            });
+        }
+
+        /// <summary>
+        /// Login a author in the system
+        /// </summary>
+        /// <response code="200">Author login validated in the system</response>
+        /// <response code="400">An error occurred when try login a author in the system</response>
+        [HttpPost(ApiRoutes.Authentication.Login)]
+        [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
+        [ProducesResponseType(typeof(AuthFailedResponse), 400)]
+        public async Task<IActionResult> Login([FromBody] AuthorLoginRequest request)
+        {
+            var authResponse = await _authService
+                .LoginAsync(request.Email, request.Password)
+                .ConfigureAwait(false);
+
+            if (!authResponse.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = authResponse.Errors
+                });
+            }
+
+            return Ok(new AuthSuccessResponse
+            {
+                Token = authResponse.Token
+            });
+        }
+
+        /// <summary>
+        /// Reset password a author in the system 
+        /// </summary>
+        /// <response code="200">Author password reseted succefully in the system</response>
+        /// <response code="400">An error occurred when try reset password a author in the system</response>
+        [HttpPost(ApiRoutes.Authentication.ResetPassword)]
+        [ProducesResponseType(typeof(ResetPasswordSuccessResponse), 200)]
+        [ProducesResponseType(typeof(AuthFailedResponse), 400)]
+        public async Task<IActionResult> ResetPassword([FromBody] AuthorResetPasswordRequest request)
+        {
+            var resetResponse = await _authService
+                .ResetPasswordAsync(request.Email, request.NewPassword)
+                .ConfigureAwait(false);
+
+            if (!resetResponse.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = resetResponse.Errors
+                });
+            }
+
+            return Ok(new ResetPasswordSuccessResponse 
+            {
+                Reseted = true,
+                SuccessMessage = "Senha redefinida com sucesso"
             });
         }
     }

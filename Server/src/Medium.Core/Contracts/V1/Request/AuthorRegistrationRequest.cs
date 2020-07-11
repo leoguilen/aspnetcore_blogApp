@@ -1,6 +1,6 @@
 ﻿namespace Medium.Core.Contracts.V1.Request
 {
-    public class UserRegistrationRequest
+    public class AuthorRegistrationRequest
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

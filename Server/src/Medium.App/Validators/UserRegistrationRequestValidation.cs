@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 using Medium.Core.Contracts.V1.Request;
+using System.Text.RegularExpressions;
 
 namespace Medium.App.Validators
 {
-    public class UserRegistrationRequestValidation : AbstractValidator<UserRegistrationRequest>
+    public class UserRegistrationRequestValidation : AbstractValidator<AuthorRegistrationRequest>
     {
         public UserRegistrationRequestValidation()
         {
@@ -25,9 +26,10 @@ namespace Medium.App.Validators
                 .EmailAddress();
 
             RuleFor(x => x.Password)
-                .NotEmpty()
-                .MinimumLength(6)
-                .WithMessage("Senha deve conter mais de 6 caracteres");
+                .NotNull()
+                .Must(pass =>
+                    Regex.IsMatch(pass, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$"))
+                .WithMessage("'Senha' não corresponde a um padrão forte");
         }
     }
 }
