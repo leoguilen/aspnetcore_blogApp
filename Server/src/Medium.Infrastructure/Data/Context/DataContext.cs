@@ -10,14 +10,6 @@ namespace Medium.Infrastructure.Data.Context
 
         public DbSet<Author> Authors { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Data Source=localhost,1400;Initial Catalog=Medium;User=sa;Password=Master2020#");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new AuthorConfiguration());

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using System;
 
 namespace Medium.App
 {
@@ -12,14 +13,17 @@ namespace Medium.App
     {
         public static void Main(string[] args)
         {
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true)
                 .Build();
 
             // Pegando url de conexão com o Seq
             var seqOptions = new SeqOptions();
             config.GetSection(nameof(SeqOptions)).Bind(seqOptions);
-            
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
@@ -27,6 +31,9 @@ namespace Medium.App
                 .WriteTo.Console()
                 .WriteTo.Seq(seqOptions.Connection)
                 .CreateLogger();
+
+            Log.Information("Application is starting...");
+            Log.Information("Seq starting in {seqConn}", seqOptions.Connection);
 
             CreateHostBuilder(args)
                 .Build()
