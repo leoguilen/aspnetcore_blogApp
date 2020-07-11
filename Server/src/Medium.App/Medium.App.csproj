@@ -35,9 +35,5 @@
     <ProjectReference Include="..\Medium.Infrastructure\Medium.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="SwaggerExamples\Response\" />
-  </ItemGroup>
-
 
 </Project>

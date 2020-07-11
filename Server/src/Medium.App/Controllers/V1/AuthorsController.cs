@@ -1,32 +1,42 @@
 ﻿using AutoMapper;
-using Medium.App.Extensions;
-using Medium.Core.Common.Builder;
 using Medium.Core.Contracts.V1;
 using Medium.Core.Contracts.V1.Request;
 using Medium.Core.Contracts.V1.Response;
 using Medium.Core.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Medium.App.Controllers.V1
 {
+    /// <summary>
+    /// Endpoint responsible for manage author registration
+    /// </summary>
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Produces("application/json")]
     public class AuthorsController : ControllerBase
     {
         private readonly IAuthorService _authorService;
-        private readonly IUriService _uriService;
         private readonly IMapper _mapper;
 
-        public AuthorsController(IAuthorService authorService, IUriService uriService, IMapper mapper)
+        public AuthorsController(IAuthorService authorService, IMapper mapper)
         {
             _authorService = authorService;
-            _uriService = uriService;
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Returns all authors in the system
+        /// </summary>
+        /// <response code="200">Returns all authors in the system</response>
         [HttpGet(ApiRoutes.Authors.GetAll)]
+        [ProducesResponseType(typeof(List<AuthorResponse>), 200)]
         public async Task<IActionResult> GetAll()
         {
             var authors = await _authorService
@@ -37,7 +47,14 @@ namespace Medium.App.Controllers.V1
             return Ok(authorsResponse);
         }
 
+        /// <summary>
+        /// Returns author in the system by your id
+        /// </summary>
+        /// <response code="200">Return author in the system by your id</response>
+        /// <response code="404">Not found any author with this id</response>
         [HttpGet(ApiRoutes.Authors.Get)]
+        [ProducesResponseType(typeof(AuthorResponse), 200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Get([FromRoute] Guid authorId)
         {
             var author = await _authorService
@@ -53,31 +70,32 @@ namespace Medium.App.Controllers.V1
             return Ok(authorResponse);
         }
 
-        [HttpPost(ApiRoutes.Authors.Create)]
-        public async Task<IActionResult> Create([FromBody] CreateAuthorRequest request)
-        {
-            var newAuthorId = Guid.NewGuid();
-            var author = new AuthorBuilder()
-                .WithId(newAuthorId)
-                .BuildAuthorByRequest(request)
-                .Build();
-
-            await _authorService.CreateAuthorAsync(author).ConfigureAwait(false);
-
-            var locationUrl = _uriService.GetAuthorUri(author.Id.ToString());
-
-            return Created(locationUrl, new Response<AuthorResponse>(
-                _mapper.Map<AuthorResponse>(author)));
-        }
-
+        /// <summary>
+        /// Update author in the system by your id
+        /// </summary>
+        /// <response code="200">Update author in the system by your id</response>
+        /// <response code="404">Not found any author with this id</response>
+        /// <response code="400">An error occurred when try update author</response>
         [HttpPut(ApiRoutes.Authors.Update)]
+        [ProducesResponseType(typeof(AuthorResponse), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> Update([FromRoute] Guid authorId, [FromBody] UpdateAuthorRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ErrorResponse
+                {
+                    Errors = ModelState.Values.SelectMany(x =>
+                        x.Errors.Select(e => e.ErrorMessage))
+                });
+            }
+
             var author = await _authorService
                 .GetAuthorByIdAsync(authorId)
                 .ConfigureAwait(false);
 
-            if (author == null) 
+            if (author == null)
                 return NotFound();
 
             author.FirstName = request.FirstName;
@@ -100,7 +118,14 @@ namespace Medium.App.Controllers.V1
             return Ok(authorResponse);
         }
 
+        /// <summary>
+        /// Delete author in the system by your id
+        /// </summary>
+        /// <response code="204">Delete author in the system by your id</response>
+        /// <response code="404">Not found any author with this id</response>
         [HttpDelete(ApiRoutes.Authors.Delete)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Delete([FromRoute] Guid authorId)
         {
             var deleted = await _authorService
