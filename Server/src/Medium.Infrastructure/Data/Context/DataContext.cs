@@ -9,10 +9,12 @@ namespace Medium.Infrastructure.Data.Context
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Author> Authors { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new AuthorConfiguration());
+            modelBuilder.ApplyConfiguration(new PostConfiguration());
         }
     }
 }

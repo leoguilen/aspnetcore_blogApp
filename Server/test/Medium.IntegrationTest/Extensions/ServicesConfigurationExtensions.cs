@@ -37,6 +37,30 @@ namespace Medium.IntegrationTest.Extensions
 
             #endregion
 
+            #region Posts
+
+            var posts = new List<Post>
+            {
+                new Post
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Post 1",
+                    Content = "First post content",
+                    Attachments = new [] { "post1img.jpg" }
+                },
+                new Post
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Post 2",
+                    Content = "Second post content",
+                    Attachments = new [] { "post2img.jpg" }
+                }
+            };
+
+            dataContext.Posts.AddRange(posts);
+
+            #endregion
+
             dataContext.SaveChanges();
 
             foreach (var entity in dataContext.ChangeTracker.Entries())

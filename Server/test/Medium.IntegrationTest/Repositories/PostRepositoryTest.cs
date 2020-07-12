@@ -34,6 +34,30 @@ namespace Medium.IntegrationTest.Repositories
             _inMemoryDbContext.Database.IsInMemory().Should().BeTrue();
             _inMemoryDbContext.Database.CanConnect().Should().BeTrue();
         }
+
+        [Fact]
+        public async Task ShouldBeReturnedListWithAllAuthors()
+        {
+            var posts = await _postRepository.GetAllAsync();
+
+            posts.Should().NotBeEmpty()
+                .And.HaveCount(2)
+                .And.SatisfyRespectively(
+                    post1 =>
+                    {
+                        post1.Id.Should().Be(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"));
+                        post1.Title.Should().Be("João");
+                        post1.Content.Should().Be("joao@email.com");
+                        post1.Attachments.Should().HaveCount(2);
+                    },
+                    post2 =>
+                    {
+                        post2.Id.Should().Be(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"));
+                        post2.Title.Should().Be("João");
+                        post2.Content.Should().Be("joao@email.com");
+                        post2.Attachments.Should().HaveCount(2);
+                    });
+        }
     }
 
     public class PostRepository : Repository<Post>, IPostRepository
@@ -55,9 +79,10 @@ namespace Medium.IntegrationTest.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Post>> GetAllAsync()
+        public async Task<IEnumerable<Post>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var posts = await FindAllAsync();
+            return await posts.ToListAsync();
         }
 
         public Task<Post> GetByIdAsync(Guid postId)
