@@ -10,6 +10,7 @@ namespace Medium.Infrastructure.unitOfWork
     {
         private readonly DataContext _dbContext;
         private IAuthorRepository _author;
+        private IPostRepository _post;
 
         public UnitOfWork(DataContext dbContext)
         {
@@ -18,6 +19,9 @@ namespace Medium.Infrastructure.unitOfWork
 
         public IAuthorRepository Authors => _author ?? 
             (_author = new AuthorRepository(_dbContext));
+
+        public IPostRepository Posts => _post ??
+            (_post = new PostRepository(_dbContext));
 
         public async Task<int> Commit()
         {
