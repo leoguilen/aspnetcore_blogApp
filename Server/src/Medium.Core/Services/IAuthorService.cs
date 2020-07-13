@@ -8,7 +8,7 @@ namespace Medium.Core.Services
     public interface IAuthorService
     {
         Task<Author> GetAuthorByIdAsync(Guid authorId);
-        Task<IEnumerable<Author>> GetAuthorsAsync();
+        Task<IEnumerable<Author>> GetAuthorsAsync(PaginationFilter paginationFilter = null);
         Task<bool> CreateAuthorAsync(Author author);
         Task<bool> UpdateAuthorAsync(Author author);
         Task<bool> DeleteAuthorAsync(Author author);

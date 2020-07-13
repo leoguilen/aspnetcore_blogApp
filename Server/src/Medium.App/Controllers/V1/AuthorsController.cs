@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Medium.Core.Contracts.V1;
 using Medium.Core.Contracts.V1.Request;
+using Medium.Core.Contracts.V1.Request.Queries;
 using Medium.Core.Contracts.V1.Response;
+using Medium.Core.Domain;
+using Medium.Core.Helpers;
 using Medium.Core.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -23,11 +26,13 @@ namespace Medium.App.Controllers.V1
     public class AuthorsController : ControllerBase
     {
         private readonly IAuthorService _authorService;
+        private readonly IUriService _uriService;
         private readonly IMapper _mapper;
 
-        public AuthorsController(IAuthorService authorService, IMapper mapper)
+        public AuthorsController(IAuthorService authorService, IUriService uriService, IMapper mapper)
         {
             _authorService = authorService;
+            _uriService = uriService;
             _mapper = mapper;
         }
 
@@ -37,14 +42,22 @@ namespace Medium.App.Controllers.V1
         /// <response code="200">Returns all authors in the system</response>
         [HttpGet(ApiRoutes.Authors.GetAll)]
         [ProducesResponseType(typeof(List<AuthorResponse>), 200)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] PaginationQuery paginationQuery)
         {
+            var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
             var authors = await _authorService
-                .GetAuthorsAsync()
+                .GetAuthorsAsync(pagination)
                 .ConfigureAwait(false);
             var authorsResponse = _mapper.Map<List<AuthorResponse>>(authors);
 
-            return Ok(authorsResponse);
+            if(pagination == null || pagination.PageNumber < 1 || pagination.PageSize < 1)
+            {
+                return Ok(new PagedResponse<AuthorResponse>(authorsResponse));
+            }
+
+            var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, pagination, authorsResponse);
+
+            return Ok(paginationResponse);
         }
 
         /// <summary>

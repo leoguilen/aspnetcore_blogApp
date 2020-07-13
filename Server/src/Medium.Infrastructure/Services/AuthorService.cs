@@ -5,6 +5,7 @@ using Medium.Infrastructure.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Medium.Infrastructure.Services
@@ -44,9 +45,22 @@ namespace Medium.Infrastructure.Services
             return await _unitOfWork.Authors.GetByIdAsync(authorId);
         }
 
-        public async Task<IEnumerable<Author>> GetAuthorsAsync()
+        public async Task<IEnumerable<Author>> GetAuthorsAsync(PaginationFilter paginationFilter = null)
         {
-            return await _unitOfWork.Authors.GetAllAsync();
+            if(paginationFilter == null)
+            {
+                return await _unitOfWork.Authors.GetAllAsync();
+            }
+
+            var skip = (paginationFilter.PageNumber - 1) * paginationFilter.PageSize;
+
+            var authors = _unitOfWork.Authors
+                .GetAllAsync()
+                .Result
+                .Skip(skip)
+                .Take(paginationFilter.PageSize);
+
+            return await Task.FromResult(authors);
         }
 
         public async Task<bool> UpdateAuthorAsync(Author author)

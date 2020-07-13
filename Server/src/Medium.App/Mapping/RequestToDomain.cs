@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Medium.Core.Contracts.V1.Request;
+using Medium.Core.Contracts.V1.Request.Queries;
 using Medium.Core.Domain;
 
 namespace Medium.App.Mapping
@@ -9,6 +10,7 @@ namespace Medium.App.Mapping
         public RequestToDomain()
         {
             CreateMap<AuthorRegistrationRequest, Author>();
+            CreateMap<PaginationQuery, PaginationFilter>();
         }
     }
 }
