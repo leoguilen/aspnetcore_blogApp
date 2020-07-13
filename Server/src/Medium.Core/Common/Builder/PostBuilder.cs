@@ -30,7 +30,7 @@ namespace Medium.Core.Common.Builder
             return this;
         }
 
-        public PostBuilder WithAttachments(params string[] atts)
+        public PostBuilder WithAttachments(string atts)
         {
             _post.Attachments = atts;
             return this;

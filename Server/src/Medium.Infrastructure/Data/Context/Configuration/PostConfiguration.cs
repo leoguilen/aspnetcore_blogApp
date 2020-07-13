@@ -20,7 +20,7 @@ namespace Medium.Infrastructure.Data.Context.Configuration
                     Id = Guid.NewGuid(),
                     Title = "Post Example",
                     Content = "Post added in migration",
-                    Attachments = new[] { "maxresdefault.jpg" }
+                    Attachments = string.Empty
                 }
             );
         }

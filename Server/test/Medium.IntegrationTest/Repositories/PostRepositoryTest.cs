@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+﻿using Bogus;
+using FluentAssertions;
+using Medium.Core.Common.Builder;
+using Medium.Core.Common.Extension;
 using Medium.Core.Domain;
 using Medium.Core.Repositories;
 using Medium.Infrastructure.Data.Context;
@@ -8,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -36,7 +40,7 @@ namespace Medium.IntegrationTest.Repositories
         }
 
         [Fact]
-        public async Task ShouldBeReturnedListWithAllAuthors()
+        public async Task ShouldBeReturnedListWithAllPosts()
         {
             var posts = await _postRepository.GetAllAsync();
 
@@ -45,64 +49,121 @@ namespace Medium.IntegrationTest.Repositories
                 .And.SatisfyRespectively(
                     post1 =>
                     {
-                        post1.Id.Should().Be(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"));
-                        post1.Title.Should().Be("João");
-                        post1.Content.Should().Be("joao@email.com");
-                        post1.Attachments.Should().HaveCount(2);
+                        post1.Id.Should().Be(Guid.Parse("b65afc54-d766-4377-8c89-22662582174e"));
+                        post1.Title.Should().Be("Post 1");
+                        post1.Content.Should().Be("First post content");
+                        post1.Attachments.Split(",").Should().HaveCount(2);
                     },
                     post2 =>
                     {
-                        post2.Id.Should().Be(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"));
-                        post2.Title.Should().Be("João");
-                        post2.Content.Should().Be("joao@email.com");
-                        post2.Attachments.Should().HaveCount(2);
+                        post2.Id.Should().Be(Guid.Parse("a06ba60c-c999-4de3-aa23-4f0c13bd71ad"));
+                        post2.Title.Should().Be("Post 2");
+                        post2.Content.Should().Be("Second post content");
+                        post2.Attachments.Split(",").Should().HaveCount(2);
                     });
         }
-    }
 
-    public class PostRepository : Repository<Post>, IPostRepository
-    {
-        public PostRepository(DataContext context) : base(context) {}
-
-        public Task CreatePostAsync(Post post)
+        [Fact]
+        public async Task ShouldBeReturnedPostById()
         {
-            throw new NotImplementedException();
+            var postId = Guid.Parse("b65afc54-d766-4377-8c89-22662582174e");
+            var expectedPost = new
+            {
+                Id = Guid.Parse("b65afc54-d766-4377-8c89-22662582174e"),
+                Title = "Post 1",
+                Content = "First post content",
+                Attachments = "post1img1.jpg,post1img2.jpg"
+            };
+
+            var post = await _postRepository.GetByIdAsync(postId);
+
+            expectedPost.Should().BeEquivalentTo(post, options =>
+                options.ExcludingMissingMembers());
         }
 
-        public Task DeletePostAsync(Guid postId)
+        [Fact]
+        public async Task ShouldBeCreatedNewPost()
         {
-            throw new NotImplementedException();
+            var faker = new Faker("pt_BR");
+            var newPost = new PostBuilder()
+                .WithId(Guid.NewGuid())
+                .WithTitle(faker.Lorem.Paragraph())
+                .WithContent(faker.Lorem.Text())
+                .WithAttachments(faker.Image.PicsumUrl())
+                .Build();
+
+            await _postRepository.CreatePostAsync(newPost);
+            var cmdResult = await _inMemoryDbContext.SaveChangesAsync();
+
+            // Verifica se alguma linha foi afetada
+            cmdResult.Should().BeGreaterOrEqualTo(1);
+
+            var createdAuthor = await _postRepository.GetByIdAsync(newPost.Id);
+
+            newPost.Should().BeEquivalentTo(createdAuthor, options =>
+                options.ExcludingMissingMembers());
+            createdAuthor.CreatedAt.Should().Be(DateTime.Now.DefaultFormat());
+            createdAuthor.UpdatedAt.Should().Be(DateTime.Now.DefaultFormat());
         }
 
-        public Task DeletePostAsync(Post post)
+        [Fact]
+        public async Task ShouldBeUpdatedPost()
         {
-            throw new NotImplementedException();
+            var faker = new Faker("pt_BR");
+            var newPostTitle = faker.Lorem.Paragraph();
+            var newPostContent = faker.Lorem.Text();
+            var firstPost = _inMemoryDbContext
+                .Posts.First();
+            firstPost.Title = newPostTitle;
+            firstPost.Content = newPostContent;
+
+            await _postRepository.UpdatePostAsync(firstPost);
+            var cmdResult = await _inMemoryDbContext.SaveChangesAsync();
+
+            // Verifica se alguma linha foi afetada
+            cmdResult.Should().BeGreaterOrEqualTo(1);
+
+            var updatedPost = await _postRepository
+                .GetByIdAsync(firstPost.Id);
+
+            updatedPost.Title.Should().Be(newPostTitle);
+            updatedPost.Content.Should().Be(newPostContent);
+            updatedPost.UpdatedAt.Should()
+                .Be(DateTime.Now.DefaultFormat());
         }
 
-        public async Task<IEnumerable<Post>> GetAllAsync()
+        [Fact]
+        public async Task ShouldBeDeletedPostById()
         {
-            var posts = await FindAllAsync();
-            return await posts.ToListAsync();
+            var postId = Guid.Parse("b65afc54-d766-4377-8c89-22662582174e");
+
+            await _postRepository.DeletePostAsync(postId);
+            var cmdResult = await _inMemoryDbContext.SaveChangesAsync();
+
+            // Verifica se alguma linha foi afetada
+            cmdResult.Should().BeGreaterOrEqualTo(1);
+
+            var deletedPost = await _postRepository.GetByIdAsync(postId);
+
+            deletedPost.Should().BeNull();
+            _inMemoryDbContext.Posts.Should().HaveCount(1);
         }
 
-        public Task<Post> GetByIdAsync(Guid postId)
+        [Fact]
+        public async Task ShouldBeDeletedPost()
         {
-            throw new NotImplementedException();
-        }
+            var post = _inMemoryDbContext.Posts.First();
 
-        public Task UpdatePostAsync(Post post)
-        {
-            throw new NotImplementedException();
-        }
-    }
+            await _postRepository.DeletePostAsync(post);
+            var cmdResult = await _inMemoryDbContext.SaveChangesAsync();
 
-    public interface IPostRepository : IRepository<Post>
-    {
-        Task<IEnumerable<Post>> GetAllAsync();
-        Task<Post> GetByIdAsync(Guid postId);
-        Task CreatePostAsync(Post post);
-        Task UpdatePostAsync(Post post);
-        Task DeletePostAsync(Guid postId);
-        Task DeletePostAsync(Post post);
+            // Verifica se alguma linha foi afetada
+            cmdResult.Should().BeGreaterOrEqualTo(1);
+
+            var deletedPost = await _postRepository.GetByIdAsync(post.Id);
+
+            deletedPost.Should().BeNull();
+            _inMemoryDbContext.Posts.Should().HaveCount(1);
+        }
     }
 }

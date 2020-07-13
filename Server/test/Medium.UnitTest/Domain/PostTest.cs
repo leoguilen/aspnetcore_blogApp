@@ -19,11 +19,7 @@ namespace Medium.UnitTest.Domain
                 Id = Guid.NewGuid(),
                 Title = faker.Lorem.Paragraph(),
                 Content = faker.Lorem.Text(),
-                Attachments = new[]
-                {
-                    faker.Internet.Url(),
-                    faker.Image.PicsumUrl()
-                },
+                Attachments = $"{faker.Internet.Url()},{faker.Image.PicsumUrl()}",
                 CreatedAt = DateTime.Now.DefaultFormat(),
                 UpdatedAt = DateTime.Now.DefaultFormat()
             };
@@ -48,11 +44,7 @@ namespace Medium.UnitTest.Domain
                 Id = Guid.NewGuid(),
                 Title = faker.Lorem.Paragraph(),
                 Content = faker.Lorem.Text(),
-                Attachments = new[]
-                {
-                    faker.Internet.Url(),
-                    faker.Image.PicsumUrl()
-                },
+                Attachments = $"{faker.Internet.Url()},{faker.Image.PicsumUrl()}",
                 CreatedAt = DateTime.Now.DefaultFormat(),
                 UpdatedAt = DateTime.Now.DefaultFormat()
             };

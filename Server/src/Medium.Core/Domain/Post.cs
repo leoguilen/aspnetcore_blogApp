@@ -1,6 +1,5 @@
 ﻿using Medium.Core.Common.Extension;
 using System;
-using System.Collections.Generic;
 
 namespace Medium.Core.Domain
 {
@@ -8,7 +7,7 @@ namespace Medium.Core.Domain
     {
         public string Title { get; set; }
         public string Content { get; set; }
-        public IEnumerable<string> Attachments { get; set; }
+        public string Attachments { get; set; }
 
         public Post()
         {

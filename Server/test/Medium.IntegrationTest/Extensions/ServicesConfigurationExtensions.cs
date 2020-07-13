@@ -43,17 +43,17 @@ namespace Medium.IntegrationTest.Extensions
             {
                 new Post
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("b65afc54-d766-4377-8c89-22662582174e"),
                     Title = "Post 1",
                     Content = "First post content",
-                    Attachments = new [] { "post1img.jpg" }
+                    Attachments = "post1img1.jpg,post1img2.jpg"
                 },
                 new Post
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("a06ba60c-c999-4de3-aa23-4f0c13bd71ad"),
                     Title = "Post 2",
                     Content = "Second post content",
-                    Attachments = new [] { "post2img.jpg" }
+                    Attachments = "post2img1.jpg,post2img2.jpg"
                 }
             };
 
