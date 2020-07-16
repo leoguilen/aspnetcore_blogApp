@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Medium.Core.Contracts.V1.Request;
+using Medium.Core.Contracts.V1.Request.Authentication;
 using System.Text.RegularExpressions;
 
 namespace Medium.App.Validators

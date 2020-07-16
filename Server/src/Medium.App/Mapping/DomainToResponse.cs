@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Medium.Core.Contracts.V1.Response;
+using Medium.Core.Contracts.V1.Response.Author;
+using Medium.Core.Contracts.V1.Response.Post;
 using Medium.Core.Domain;
 
 namespace Medium.App.Mapping

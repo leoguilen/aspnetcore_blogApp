@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Medium.Core.Contracts.V1.Request;
+using Medium.Core.Contracts.V1.Request.Author;
 
 namespace Medium.App.Validators
 {

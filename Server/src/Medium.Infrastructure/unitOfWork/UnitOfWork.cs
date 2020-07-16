@@ -17,7 +17,7 @@ namespace Medium.Infrastructure.unitOfWork
             _dbContext = dbContext;
         }
 
-        public IAuthorRepository Authors => _author ?? 
+        public IAuthorRepository Authors => _author ??
             (_author = new AuthorRepository(_dbContext));
 
         public IPostRepository Posts => _post ??
@@ -25,17 +25,17 @@ namespace Medium.Infrastructure.unitOfWork
 
         public async Task<int> Commit()
         {
-            int status = 0; 
+            int status = 0;
 
-            using var dbContextTransaction = 
+            using var dbContextTransaction =
                 await _dbContext.Database
                     .BeginTransactionAsync();
             try
             {
                 status = await _dbContext.SaveChangesAsync();
                 await dbContextTransaction.CommitAsync();
-            } 
-            catch 
+            }
+            catch
             {
                 await dbContextTransaction.RollbackAsync();
             }

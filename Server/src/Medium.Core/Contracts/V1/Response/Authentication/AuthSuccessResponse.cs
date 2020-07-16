@@ -1,4 +1,4 @@
-﻿namespace Medium.Core.Contracts.V1.Response
+﻿namespace Medium.Core.Contracts.V1.Response.Authentication
 {
     public class AuthSuccessResponse
     {

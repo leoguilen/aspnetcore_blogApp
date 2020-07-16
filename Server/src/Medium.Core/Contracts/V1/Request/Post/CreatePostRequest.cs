@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace Medium.Core.Contracts.V1.Response
+﻿namespace Medium.Core.Contracts.V1.Request.Post
 {
-    public class PostResponse
+    public class CreatePostRequest
     {
-        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public string Attachments { get; set; }

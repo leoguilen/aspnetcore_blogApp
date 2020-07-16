@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Medium.Core.Contracts.V1.Response
+namespace Medium.Core.Contracts.V1.Response.Authentication
 {
     public class AuthFailedResponse
     {

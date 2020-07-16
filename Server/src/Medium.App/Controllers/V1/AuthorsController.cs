@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Medium.Core.Contracts.V1;
-using Medium.Core.Contracts.V1.Request;
+using Medium.Core.Contracts.V1.Request.Author;
 using Medium.Core.Contracts.V1.Request.Queries;
 using Medium.Core.Contracts.V1.Response;
+using Medium.Core.Contracts.V1.Response.Author;
 using Medium.Core.Domain;
 using Medium.Core.Helpers;
 using Medium.Core.Services;
@@ -50,7 +51,7 @@ namespace Medium.App.Controllers.V1
                 .ConfigureAwait(false);
             var authorsResponse = _mapper.Map<List<AuthorResponse>>(authors);
 
-            if(pagination == null || pagination.PageNumber < 1 || pagination.PageSize < 1)
+            if (pagination == null || pagination.PageNumber < 1 || pagination.PageSize < 1)
             {
                 return Ok(new PagedResponse<AuthorResponse>(authorsResponse));
             }

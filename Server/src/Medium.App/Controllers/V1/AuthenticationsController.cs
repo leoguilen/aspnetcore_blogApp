@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Medium.Core.Contracts.V1;
-using Medium.Core.Contracts.V1.Request;
-using Medium.Core.Contracts.V1.Response;
+using Medium.Core.Contracts.V1.Request.Authentication;
+using Medium.Core.Contracts.V1.Response.Authentication;
 using Medium.Core.Domain;
 using Medium.Core.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -118,7 +118,7 @@ namespace Medium.App.Controllers.V1
                 });
             }
 
-            return Ok(new ResetPasswordSuccessResponse 
+            return Ok(new ResetPasswordSuccessResponse
             {
                 Reseted = true,
                 SuccessMessage = "Senha redefinida com sucesso"

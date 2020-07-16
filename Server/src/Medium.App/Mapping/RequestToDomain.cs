@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Medium.Core.Contracts.V1.Request;
+using Medium.Core.Contracts.V1.Request.Authentication;
 using Medium.Core.Contracts.V1.Request.Queries;
 using Medium.Core.Domain;
 

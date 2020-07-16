@@ -1,4 +1,4 @@
-﻿namespace Medium.Core.Contracts.V1.Request
+﻿namespace Medium.Core.Contracts.V1.Request.Authentication
 {
     public class AuthorResetPasswordRequest
     {

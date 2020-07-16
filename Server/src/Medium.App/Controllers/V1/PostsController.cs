@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Medium.Core.Common.Builder;
 using Medium.Core.Contracts.V1;
-using Medium.Core.Contracts.V1.Request;
+using Medium.Core.Contracts.V1.Request.Post;
 using Medium.Core.Contracts.V1.Request.Queries;
 using Medium.Core.Contracts.V1.Response;
+using Medium.Core.Contracts.V1.Response.Post;
 using Medium.Core.Domain;
 using Medium.Core.Helpers;
 using Medium.Core.Services;
@@ -42,7 +43,7 @@ namespace Medium.App.Controllers.V1
         /// </summary>
         /// <response code="200">Returns all posts in the system</response>
         [HttpGet(ApiRoutes.Posts.GetAll)]
-        [ProducesResponseType(typeof(List<PostResponse>),200)]
+        [ProducesResponseType(typeof(List<PostResponse>), 200)]
         public async Task<IActionResult> GetAll([FromQuery] PaginationQuery paginationQuery)
         {
             var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
@@ -68,7 +69,7 @@ namespace Medium.App.Controllers.V1
         /// <response code="200">Return post in the system by your id</response>
         /// <response code="404">Not found any post with this id</response>
         [HttpGet(ApiRoutes.Posts.Get)]
-        [ProducesResponseType(typeof(PostResponse),200)]
+        [ProducesResponseType(typeof(PostResponse), 200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Get([FromRoute] Guid postId)
         {
@@ -76,7 +77,7 @@ namespace Medium.App.Controllers.V1
                 .GetPostByIdAsync(postId)
                 .ConfigureAwait(false);
 
-            if (post == null) 
+            if (post == null)
                 return NotFound();
 
             var postResponse = new Response<PostResponse>(
@@ -91,8 +92,8 @@ namespace Medium.App.Controllers.V1
         /// <response code="201">Create a new post in the system</response>
         /// <response code="400">An error occurred when try create a new post in the system</response>
         [HttpPost(ApiRoutes.Posts.Create)]
-        [ProducesResponseType(typeof(PostResponse),201)]
-        [ProducesResponseType(typeof(ErrorResponse),400)]
+        [ProducesResponseType(typeof(PostResponse), 201)]
+        [ProducesResponseType(typeof(ErrorResponse), 400)]
         public async Task<IActionResult> Create([FromBody] CreatePostRequest request)
         {
             if (!ModelState.IsValid)
@@ -128,7 +129,7 @@ namespace Medium.App.Controllers.V1
         /// <response code="404">Not found any post with this id</response>
         /// <response code="400">An error occurred when try update post</response>
         [HttpPut(ApiRoutes.Posts.Update)]
-        [ProducesResponseType(typeof(PostResponse),200)]
+        [ProducesResponseType(typeof(PostResponse), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> Update([FromRoute] Guid postId, [FromBody] UpdatePostRequest request)
