@@ -9,6 +9,7 @@ namespace Medium.App.Mapping
         public DomainToResponse()
         {
             CreateMap<Author, AuthorResponse>();
+            CreateMap<Post, PostResponse>();
         }
     }
 }

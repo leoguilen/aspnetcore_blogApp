@@ -3,6 +3,7 @@ using Medium.Core.Services;
 using Medium.Core.UnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Medium.Infrastructure.Services
@@ -57,9 +58,22 @@ namespace Medium.Infrastructure.Services
             return await _unitOfWork.Posts.GetByIdAsync(postId);
         }
 
-        public async Task<IEnumerable<Post>> GetPostsAsync()
+        public async Task<IEnumerable<Post>> GetPostsAsync(PaginationFilter paginationFilter = null)
         {
-            return await _unitOfWork.Posts.GetAllAsync();
+            if (paginationFilter == null)
+            {
+                return await _unitOfWork.Posts.GetAllAsync();
+            }
+
+            var skip = (paginationFilter.PageNumber - 1) * paginationFilter.PageSize;
+
+            var posts = _unitOfWork.Posts
+                .GetAllAsync()
+                .Result
+                .Skip(skip)
+                .Take(paginationFilter.PageSize);
+
+            return await Task.FromResult(posts);
         }
 
         public async Task<bool> UpdatePostAsync(Post post)

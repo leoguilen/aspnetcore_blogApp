@@ -8,7 +8,7 @@ namespace Medium.Core.Services
     public interface IPostService
     {
         Task<Post> GetPostByIdAsync(Guid postId);
-        Task<IEnumerable<Post>> GetPostsAsync();
+        Task<IEnumerable<Post>> GetPostsAsync(PaginationFilter paginationFilter = null);
         Task<bool> CreatePostAsync(Post post);
         Task<bool> UpdatePostAsync(Post post);
         Task<bool> DeletePostAsync(Post post);

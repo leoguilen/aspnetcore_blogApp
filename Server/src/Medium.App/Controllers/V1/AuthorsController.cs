@@ -55,7 +55,8 @@ namespace Medium.App.Controllers.V1
                 return Ok(new PagedResponse<AuthorResponse>(authorsResponse));
             }
 
-            var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, pagination, authorsResponse);
+            var paginationResponse = PaginationHelpers
+                .CreatePaginatedResponse(_uriService, pagination, authorsResponse);
 
             return Ok(paginationResponse);
         }
@@ -111,12 +112,12 @@ namespace Medium.App.Controllers.V1
             if (author == null)
                 return NotFound();
 
-            author.FirstName = request.FirstName;
-            author.LastName = request.LastName;
-            author.Username = request.Username;
-            author.Email = request.Email;
-            author.Bio = request.Bio;
-            author.Avatar = request.Avatar;
+            author.FirstName = request?.FirstName;
+            author.LastName = request?.LastName;
+            author.Username = request?.Username;
+            author.Email = request?.Email;
+            author.Bio = request?.Bio;
+            author.Avatar = request?.Avatar;
 
             var updated = await _authorService
                 .UpdateAuthorAsync(author)
