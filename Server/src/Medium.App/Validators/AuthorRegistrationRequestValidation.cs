@@ -11,12 +11,14 @@ namespace Medium.App.Validators
             RuleFor(x => x.FirstName)
                 .NotEmpty()
                 .MinimumLength(4)
-                .Matches("^[a-zA Z0-9 ]*$");
-
+                .Must(first => 
+                    Regex.IsMatch(first, @"^[A-Z][a-zA-Z]*$"));
+            
             RuleFor(x => x.LastName)
                 .NotEmpty()
                 .MinimumLength(4)
-                .Matches("^[a-zA Z0-9 ]*$");
+                .Must(last =>
+                    Regex.IsMatch(last, @"^[A-Z][a-zA-Z]*$"));
 
             RuleFor(x => x.Username)
                 .NotEmpty();
@@ -26,7 +28,7 @@ namespace Medium.App.Validators
                 .EmailAddress();
 
             RuleFor(x => x.Password)
-                .NotNull()
+                .NotEmpty()
                 .Must(pass =>
                     Regex.IsMatch(pass, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$"))
                 .WithMessage("'Senha' não corresponde a um padrão forte");
