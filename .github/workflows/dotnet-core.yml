@@ -25,7 +25,3 @@ jobs:
       run: dotnet test .//Server//test//Medium.UnitTest// --no-restore --verbosity normal
     - name: Integration Test
       run: dotnet test .//Server//test//Medium.IntegrationTest// --no-restore --verbosity normal
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
