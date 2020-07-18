@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Medium.Core.Contracts.V1;
 using Medium.Core.Contracts.V1.Request.Author;
+using Medium.Core.Contracts.V1.Response.Authentication;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http;
@@ -159,5 +160,39 @@ namespace Medium.IntegrationTest.Controllers.AuthenticationsControllerTest
         }
 
         #endregion
+
+        [Theory]
+        [InlineData("joao@email.com")]
+        [InlineData("maria@email.com")]
+        public async Task ShouldBeReturned_FailedResponse_IfAlreadyExistsEqualsEmail(string alreadyRegisteredEmail)
+        {
+            _createAuthorRequest.Email = alreadyRegisteredEmail;
+
+            var response = await HttpClientTest
+                .PostAsJsonAsync(_requestUri,
+                    _createAuthorRequest);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            (await response.Content.ReadAsAsync<AuthFailedResponse>())
+                .Errors.Should()
+                .HaveCount(1).And
+                .BeEquivalentTo(new[] { "Author with this email already exists" });
+
+            _output.WriteLine($"Valor entrada: {alreadyRegisteredEmail} | Resultado teste: {response.StatusCode}");
+        }
+
+        [Fact]
+        public async Task ShouldBeReturned_SuccessResponse_AndRegisterNewAuthor()
+        {
+            var response = await HttpClientTest
+                .PostAsJsonAsync(_requestUri,
+                    _createAuthorRequest);
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            (await response.Content.ReadAsAsync<AuthSuccessResponse>())
+                .Token.Should().NotBeNullOrEmpty();
+
+            _output.WriteLine($"Valor entrada: {JObject.FromObject(_createAuthorRequest)} | Resultado teste: {response.StatusCode}");
+        }
     }
 }
