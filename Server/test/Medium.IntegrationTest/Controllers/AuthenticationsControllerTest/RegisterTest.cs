@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using FluentAssertions;
 using Medium.Core.Contracts.V1;
-using Medium.Core.Contracts.V1.Request.Author;
+using Medium.Core.Contracts.V1.Request.Authentication;
 using Medium.Core.Contracts.V1.Response.Authentication;
 using Newtonsoft.Json.Linq;
 using System.Net;
@@ -17,7 +17,7 @@ namespace Medium.IntegrationTest.Controllers.AuthenticationsControllerTest
         private readonly string _requestUri = ApiRoutes.Authentication.Register;
 
         private readonly ITestOutputHelper _output;
-        private readonly CreateAuthorRequest _createAuthorRequest;
+        private readonly AuthorRegistrationRequest _authorRegistrationhorRequest;
         private readonly Faker _faker;
 
         public RegisterTest(CustomWebApplicationFactory factory,
@@ -26,15 +26,13 @@ namespace Medium.IntegrationTest.Controllers.AuthenticationsControllerTest
             _output = output;
             _faker = new Faker("pt_BR");
 
-            _createAuthorRequest = new CreateAuthorRequest
+            _authorRegistrationhorRequest = new AuthorRegistrationRequest
             {
                 FirstName = _faker.Person.FirstName,
                 LastName = _faker.Person.LastName,
                 Username = _faker.Person.UserName,
                 Email = _faker.Person.Email,
-                Password = _faker.Internet.Password(memorable: true, prefix: "Y#10"),
-                Bio = _faker.Lorem.Paragraphs(),
-                Avatar = _faker.Person.Avatar
+                Password = _faker.Internet.Password(memorable: true, prefix: "Y#10")
             };
         }
 
@@ -46,11 +44,11 @@ namespace Medium.IntegrationTest.Controllers.AuthenticationsControllerTest
         [InlineData("Joao123")]
         public async Task ShouldBeReturned_ErrorResponse_IfFirstNameFieldIsNotValidated(string invalidFirstName)
         {
-            _createAuthorRequest.FirstName = invalidFirstName;
+            _authorRegistrationhorRequest.FirstName = invalidFirstName;
 
             var response = await HttpClientTest
                 .PostAsJsonAsync(_requestUri,
-                    _createAuthorRequest);
+                    _authorRegistrationhorRequest);
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
@@ -71,11 +69,11 @@ namespace Medium.IntegrationTest.Controllers.AuthenticationsControllerTest
         [InlineData("Silv123")]
         public async Task ShouldBeReturned_ErrorResponse_IfLastNameFieldIsNotValidated(string invalidLastName)
         {
-            _createAuthorRequest.LastName = invalidLastName;
+            _authorRegistrationhorRequest.LastName = invalidLastName;
 
             var response = await HttpClientTest
                 .PostAsJsonAsync(_requestUri,
-                    _createAuthorRequest);
+                    _authorRegistrationhorRequest);
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
@@ -93,11 +91,11 @@ namespace Medium.IntegrationTest.Controllers.AuthenticationsControllerTest
         [Fact]
         public async Task ShouldBeReturned_ErrorResponse_IfUsernameFieldIsNotValidated()
         {
-            _createAuthorRequest.Username = string.Empty;
+            _authorRegistrationhorRequest.Username = string.Empty;
 
             var response = await HttpClientTest
                 .PostAsJsonAsync(_requestUri,
-                    _createAuthorRequest);
+                    _authorRegistrationhorRequest);
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
@@ -117,11 +115,11 @@ namespace Medium.IntegrationTest.Controllers.AuthenticationsControllerTest
         [InlineData("123abc")]
         public async Task ShouldBeReturned_ErrorResponse_IfPasswordFieldIsNotValidated(string invalidPassword)
         {
-            _createAuthorRequest.Password = invalidPassword;
+            _authorRegistrationhorRequest.Password = invalidPassword;
 
             var response = await HttpClientTest
                 .PostAsJsonAsync(_requestUri,
-                    _createAuthorRequest);
+                    _authorRegistrationhorRequest);
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
@@ -140,11 +138,11 @@ namespace Medium.IntegrationTest.Controllers.AuthenticationsControllerTest
         public async Task ShouldBeReturned_ErrorResponse_IfEmailFieldIsNotValidated()
         {
             var invalidEmail = _faker.Random.String2(10, 20);
-            _createAuthorRequest.Email = invalidEmail;
+            _authorRegistrationhorRequest.Email = invalidEmail;
 
             var response = await HttpClientTest
                 .PostAsJsonAsync(_requestUri,
-                    _createAuthorRequest);
+                    _authorRegistrationhorRequest);
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
@@ -166,11 +164,11 @@ namespace Medium.IntegrationTest.Controllers.AuthenticationsControllerTest
         [InlineData("maria@email.com")]
         public async Task ShouldBeReturned_FailedResponse_IfAlreadyExistsEqualsEmail(string alreadyRegisteredEmail)
         {
-            _createAuthorRequest.Email = alreadyRegisteredEmail;
+            _authorRegistrationhorRequest.Email = alreadyRegisteredEmail;
 
             var response = await HttpClientTest
                 .PostAsJsonAsync(_requestUri,
-                    _createAuthorRequest);
+                    _authorRegistrationhorRequest);
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             (await response.Content.ReadAsAsync<AuthFailedResponse>())
@@ -186,13 +184,13 @@ namespace Medium.IntegrationTest.Controllers.AuthenticationsControllerTest
         {
             var response = await HttpClientTest
                 .PostAsJsonAsync(_requestUri,
-                    _createAuthorRequest);
+                    _authorRegistrationhorRequest);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             (await response.Content.ReadAsAsync<AuthSuccessResponse>())
                 .Token.Should().NotBeNullOrEmpty();
 
-            _output.WriteLine($"Valor entrada: {JObject.FromObject(_createAuthorRequest)} | Resultado teste: {response.StatusCode}");
+            _output.WriteLine($"Valor entrada: {JObject.FromObject(_authorRegistrationhorRequest)} | Resultado teste: {response.StatusCode}");
         }
     }
 }

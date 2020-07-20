@@ -112,9 +112,8 @@ namespace Medium.Infrastructure.Services
                 };
             }
 
-            string newPasswordHashed = SecurePasswordHasher.GenerateHash(newPassword, existingAuthor.Salt);
-
-            existingAuthor.Password = newPasswordHashed;
+            existingAuthor.Password = SecurePasswordHasher
+                .GenerateHash(newPassword, existingAuthor.Salt);
 
             await _unitOfWork.Authors.UpdateAuthorAsync(existingAuthor);
             int updated = await _unitOfWork.Commit();
