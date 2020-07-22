@@ -42,7 +42,7 @@ namespace Medium.App.Controllers.V1
         /// </summary>
         /// <response code="200">Returns all authors in the system</response>
         [HttpGet(ApiRoutes.Authors.GetAll)]
-        [ProducesResponseType(typeof(List<AuthorResponse>), 200)]
+        [ProducesResponseType(typeof(PagedResponse<AuthorResponse>), 200)]
         public async Task<IActionResult> GetAll([FromQuery] PaginationQuery paginationQuery)
         {
             var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
