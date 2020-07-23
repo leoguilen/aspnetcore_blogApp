@@ -29,8 +29,8 @@ namespace Medium.IntegrationTest.Controllers
                 ApiRoutes.Authentication.Login,
                 new AuthorLoginRequest
                 {
-                    Email = "joao@email.com",
-                    Password = "joao123"
+                    Email = "maria@email.com",
+                    Password = "maria123"
                 });
 
             var authResponse = await response.Content
