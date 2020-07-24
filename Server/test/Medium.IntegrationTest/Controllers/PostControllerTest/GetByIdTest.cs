@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Medium.Core.Contracts.V1;
 using Medium.Core.Contracts.V1.Response;
-using Medium.Core.Contracts.V1.Response.Author;
+using Medium.Core.Contracts.V1.Response.Post;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Medium.IntegrationTest.Controllers.AuthorControllerTest
+namespace Medium.IntegrationTest.Controllers.PostControllerTest
 {
     public class GetByIdTest : ControllersTest
     {
-        private readonly string _requestUri = ApiRoutes.Authors.Get;
+        private readonly string _requestUri = ApiRoutes.Posts.Get;
         private readonly ITestOutputHelper _output;
 
         public GetByIdTest(CustomWebApplicationFactory factory,
@@ -23,14 +23,14 @@ namespace Medium.IntegrationTest.Controllers.AuthorControllerTest
         }
 
         [Fact]
-        public async Task ShouldBeReturned_NotFoundResponse_IfAuthorIdNotExistsInDatabase()
+        public async Task ShouldBeReturned_NotFoundResponse_IfPostIdNotExistsInDatabase()
         {
             var randomId = Guid.NewGuid().ToString();
 
             await AuthenticateAsync();
 
             var response = await HttpClientTest.GetAsync(
-                _requestUri.Replace("{authorId}", randomId));
+                _requestUri.Replace("{postId}", randomId));
 
             _output.WriteLine($"Response: {await response.Content.ReadAsStringAsync()}");
 
@@ -38,31 +38,32 @@ namespace Medium.IntegrationTest.Controllers.AuthorControllerTest
         }
 
         [Fact]
-        public async Task ShouldBeReturned_AuthorResponse_IfAuthorIdExistsInDatabase()
+        public async Task ShouldBeReturned_PostResponse_IfAuthorIdExistsInDatabase()
         {
-            var validId = Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702");
-            var expectedAuthorResponse = 
-                new Response<AuthorResponse>(
-                    new AuthorResponse 
+            var validId = Guid.Parse("b65afc54-d766-4377-8c89-22662582174e");
+            var expectedPostResponse =
+                new Response<PostResponse>(
+                    new PostResponse
                     {
                         Id = validId,
-                        FirstName = "Maria",
-                        Email = "maria@email.com"
+                        Title = "Post 1",
+                        Content = "First post content",
+                        Attachments = "post1img1.jpg,post1img2.jpg"
                     });
 
             await AuthenticateAsync();
 
             var response = await HttpClientTest.GetAsync(
-                _requestUri.Replace("{authorId}", 
+                _requestUri.Replace("{postId}",
                     validId.ToString()));
 
             _output.WriteLine($"Response: {await response.Content.ReadAsStringAsync()}");
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            (await response.Content.ReadAsAsync<Response<AuthorResponse>>())
+            (await response.Content.ReadAsAsync<Response<PostResponse>>())
                 .Data.Should()
                 .NotBeNull().And
-                .BeEquivalentTo(expectedAuthorResponse, 
+                .BeEquivalentTo(expectedPostResponse,
                     x => x.ExcludingMissingMembers());
         }
     }
