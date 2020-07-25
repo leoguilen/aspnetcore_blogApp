@@ -96,12 +96,12 @@ namespace Medium.IntegrationTest.Repositories
             // Verifica se alguma linha foi afetada
             cmdResult.Should().BeGreaterOrEqualTo(1);
 
-            var createdAuthor = await _postRepository.GetByIdAsync(newPost.Id);
+            var createdPost = await _postRepository.GetByIdAsync(newPost.Id);
 
-            newPost.Should().BeEquivalentTo(createdAuthor, options =>
+            newPost.Should().BeEquivalentTo(createdPost, options =>
                 options.ExcludingMissingMembers());
-            createdAuthor.CreatedAt.Should().Be(DateTime.Now.DefaultFormat());
-            createdAuthor.UpdatedAt.Should().Be(DateTime.Now.DefaultFormat());
+            createdPost.CreatedAt.Should().Be(DateTime.Now.DefaultFormat());
+            createdPost.UpdatedAt.Should().Be(DateTime.Now.DefaultFormat());
         }
 
         [Fact]

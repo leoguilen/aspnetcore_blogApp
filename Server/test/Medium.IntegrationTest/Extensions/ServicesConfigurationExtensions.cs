@@ -61,6 +61,26 @@ namespace Medium.IntegrationTest.Extensions
 
             #endregion
 
+            #region Tags
+                
+            var tags = new List<Tag> 
+            {
+                new Tag 
+                {
+                    Id = Guid.Parse("5d5e9a28-7c3e-4c2a-8098-b866eab33e61"),
+                    Name = "Tag_1"
+                }, 
+                new Tag 
+                {
+                    Id = Guid.Parse("d94e6e00-96d0-4fc7-b621-c7746705b471"),
+                    Name = "Tag_2"                    
+                }, 
+            };
+
+            dataContext.Tags.AddRange(tags);
+
+            #endregion
+
             dataContext.SaveChanges();
 
             foreach (var entity in dataContext.ChangeTracker.Entries())
