@@ -7,6 +7,7 @@ namespace Medium.Core.UnitOfWork
     {
         IAuthorRepository Authors { get; }
         IPostRepository Posts { get; }
+        ITagRepository Tags { get; }
         Task<int> Commit();
     }
 }

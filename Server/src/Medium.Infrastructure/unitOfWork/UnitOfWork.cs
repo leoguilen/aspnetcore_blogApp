@@ -11,6 +11,7 @@ namespace Medium.Infrastructure.unitOfWork
         private readonly DataContext _dbContext;
         private IAuthorRepository _author;
         private IPostRepository _post;
+        private ITagRepository _tags;
 
         public UnitOfWork(DataContext dbContext)
         {
@@ -22,6 +23,9 @@ namespace Medium.Infrastructure.unitOfWork
 
         public IPostRepository Posts => _post ??
             (_post = new PostRepository(_dbContext));
+
+        public ITagRepository Tags => _tags ??
+            (_tags = new TagRepository(_dbContext));
 
         public async Task<int> Commit()
         {
