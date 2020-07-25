@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Medium.Core.Common.Builder;
 using Medium.Core.Common.Extension;
-using Medium.Core.Domain;
 using Medium.Core.Repositories;
 using Medium.Infrastructure.Data.Context;
 using Medium.Infrastructure.Repositories;
@@ -10,7 +9,6 @@ using Medium.IntegrationTest.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
