@@ -22,6 +22,7 @@ namespace Medium.App.Installers
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<ITagService,TagService>();
             services.AddScoped<IAuthorAuthenticationService, AuthorAuthenticationService>();
         }
     }

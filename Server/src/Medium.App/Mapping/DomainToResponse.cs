@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Medium.Core.Contracts.V1.Response.Author;
 using Medium.Core.Contracts.V1.Response.Post;
+using Medium.Core.Contracts.V1.Response.Tag;
 using Medium.Core.Domain;
 
 namespace Medium.App.Mapping
@@ -11,6 +12,7 @@ namespace Medium.App.Mapping
         {
             CreateMap<Author, AuthorResponse>();
             CreateMap<Post, PostResponse>();
+            CreateMap<Tag, TagResponse>();
         }
     }
 }
