@@ -7,6 +7,7 @@ namespace Medium.Core.Services
     {
         Uri GetAuthorUri(string authorId);
         Uri GetPostUri(string postId);
+        Uri GetTagUri(string tagId);
         Uri GetAllUri(PaginationQuery pagination = null);
     }
 }

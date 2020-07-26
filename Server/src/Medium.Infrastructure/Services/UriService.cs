@@ -32,14 +32,13 @@ namespace Medium.Infrastructure.Services
             return new Uri(modifieldUri);
         }
 
-        public Uri GetAuthorUri(string authorId)
-        {
-            return new Uri(_baseUri + ApiRoutes.Authors.Get.Replace("{authorId}", authorId));
-        }
+        public Uri GetAuthorUri(string authorId) => 
+            new Uri(_baseUri + ApiRoutes.Authors.Get.Replace("{authorId}", authorId));
 
-        public Uri GetPostUri(string postId)
-        {
-            return new Uri(_baseUri + ApiRoutes.Posts.Get.Replace("{postId}", postId));
-        }
+        public Uri GetPostUri(string postId) => 
+            new Uri(_baseUri + ApiRoutes.Posts.Get.Replace("{postId}", postId));
+
+        public Uri GetTagUri(string tagId) => 
+            new Uri(_baseUri + ApiRoutes.Tags.Get.Replace("{tagId}", tagId));
     }
 }
