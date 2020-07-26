@@ -31,7 +31,8 @@ namespace Medium.App.Controllers.V1
         private readonly IUriService _uriService;
         private readonly IMapper _mapper;
 
-        public PostsController(IPostService postService, IUriService uriService, IMapper mapper)
+        public PostsController(IPostService postService, 
+            IUriService uriService, IMapper mapper)
         {
             _postService = postService;
             _uriService = uriService;

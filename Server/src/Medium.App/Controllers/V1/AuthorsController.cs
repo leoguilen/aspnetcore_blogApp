@@ -30,7 +30,8 @@ namespace Medium.App.Controllers.V1
         private readonly IUriService _uriService;
         private readonly IMapper _mapper;
 
-        public AuthorsController(IAuthorService authorService, IUriService uriService, IMapper mapper)
+        public AuthorsController(IAuthorService authorService, 
+            IUriService uriService, IMapper mapper)
         {
             _authorService = authorService;
             _uriService = uriService;
