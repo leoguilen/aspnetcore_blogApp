@@ -25,6 +25,7 @@ namespace Medium.IntegrationTest
                 .EnableServiceProviderCaching(false));
 
             serviceProvider.AddSingleton<IUnitOfWork, UnitOfWork>();
+            serviceProvider.AddMemoryCache();
 
             return serviceProvider
                 .BuildServiceProvider();
