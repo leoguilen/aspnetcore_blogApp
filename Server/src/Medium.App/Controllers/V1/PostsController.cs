@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace Medium.App.Controllers.V1
 {
+#pragma warning disable CA1307 // Especificar StringComparison
     /// <summary>
     /// Endpoint responsible for manage posts
     /// </summary>
@@ -28,13 +29,16 @@ namespace Medium.App.Controllers.V1
     public class PostsController : ControllerBase
     {
         private readonly IPostService _postService;
+        private readonly ICacheService _cacheService;
         private readonly IUriService _uriService;
         private readonly IMapper _mapper;
 
         public PostsController(IPostService postService, 
-            IUriService uriService, IMapper mapper)
+            IUriService uriService, IMapper mapper, 
+            ICacheService cacheService)
         {
             _postService = postService;
+            _cacheService = cacheService;
             _uriService = uriService;
             _mapper = mapper;
         }
@@ -48,10 +52,23 @@ namespace Medium.App.Controllers.V1
         public async Task<IActionResult> GetAll([FromQuery] PaginationQuery paginationQuery)
         {
             var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
-            var posts = await _postService
-                .GetPostsAsync(pagination)
-                .ConfigureAwait(false);
-            var postsResponse = _mapper.Map<List<PostResponse>>(posts);
+            // Pegando posts cacheados
+            var postsResponse = _cacheService
+                .GetCachedResponse<List<PostResponse>>(
+                    ApiRoutes.Posts.GetAll);
+            
+            if(postsResponse == null)
+            {
+                var posts = await _postService
+                    .GetPostsAsync(pagination)
+                    .ConfigureAwait(false);
+                postsResponse = _mapper.Map<List<PostResponse>>(posts);
+
+                _cacheService.SetCacheResponse(
+                    ApiRoutes.Posts.GetAll, 
+                    postsResponse, 
+                    TimeSpan.FromMinutes(2));
+            }
 
             if (pagination == null || pagination.PageNumber < 1 || pagination.PageSize < 1)
             {
@@ -74,15 +91,28 @@ namespace Medium.App.Controllers.V1
         [ProducesResponseType(404)]
         public async Task<IActionResult> Get([FromRoute] Guid postId)
         {
-            var post = await _postService
-                .GetPostByIdAsync(postId)
-                .ConfigureAwait(false);
+            // Pegando post cacheado
+            var postResponse = _cacheService
+                .GetCachedResponse<Response<PostResponse>>(
+                    ApiRoutes.Posts.Get.Replace("{postId}", 
+                    postId.ToString()));
 
-            if (post == null)
-                return NotFound();
+            if(postResponse == null)
+            {
+                var post = await _postService
+                    .GetPostByIdAsync(postId)
+                    .ConfigureAwait(false);
 
-            var postResponse = new Response<PostResponse>(
-                _mapper.Map<PostResponse>(post));
+                if (post == null)
+                    return NotFound();
+
+                postResponse = new Response<PostResponse>(
+                    _mapper.Map<PostResponse>(post));
+
+                _cacheService.SetCacheResponse(ApiRoutes.Posts.Get
+                    .Replace("{postId}", postId.ToString()), 
+                    postResponse);
+            }
 
             return Ok(postResponse);
         }
@@ -179,4 +209,5 @@ namespace Medium.App.Controllers.V1
             return NotFound();
         }
     }
+#pragma warning restore CA1307 // Especificar StringComparison
 }

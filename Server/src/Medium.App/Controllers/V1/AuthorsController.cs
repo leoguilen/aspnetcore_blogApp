@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 
 namespace Medium.App.Controllers.V1
 {
+#pragma warning disable CA1307 // Especificar StringComparison
     /// <summary>
     /// Endpoint responsible for manage author registration
     /// </summary>
@@ -27,13 +28,16 @@ namespace Medium.App.Controllers.V1
     public class AuthorsController : ControllerBase
     {
         private readonly IAuthorService _authorService;
+        private readonly ICacheService _cacheService;
         private readonly IUriService _uriService;
         private readonly IMapper _mapper;
 
-        public AuthorsController(IAuthorService authorService, 
-            IUriService uriService, IMapper mapper)
+        public AuthorsController(IAuthorService authorService,
+            IUriService uriService, IMapper mapper,
+            ICacheService cacheService)
         {
             _authorService = authorService;
+            _cacheService = cacheService;
             _uriService = uriService;
             _mapper = mapper;
         }
@@ -47,10 +51,23 @@ namespace Medium.App.Controllers.V1
         public async Task<IActionResult> GetAll([FromQuery] PaginationQuery paginationQuery)
         {
             var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
-            var authors = await _authorService
-                .GetAuthorsAsync(pagination)
-                .ConfigureAwait(false);
-            var authorsResponse = _mapper.Map<List<AuthorResponse>>(authors);
+            // Pegando autores cacheados
+            var authorsResponse = _cacheService
+                .GetCachedResponse<List<AuthorResponse>>(
+                    ApiRoutes.Authors.GetAll);
+
+            if (authorsResponse == null)
+            {
+                var authors = await _authorService
+                    .GetAuthorsAsync(pagination)
+                    .ConfigureAwait(false);
+                authorsResponse = _mapper.Map<List<AuthorResponse>>(authors);
+
+                _cacheService.SetCacheResponse(
+                    ApiRoutes.Authors.GetAll,
+                    authorsResponse,
+                    TimeSpan.FromMinutes(2));
+            }
 
             if (pagination == null || pagination.PageNumber < 1 || pagination.PageSize < 1)
             {
@@ -73,15 +90,28 @@ namespace Medium.App.Controllers.V1
         [ProducesResponseType(404)]
         public async Task<IActionResult> Get([FromRoute] Guid authorId)
         {
-            var author = await _authorService
-                .GetAuthorByIdAsync(authorId)
-                .ConfigureAwait(false);
+            // Pegando autor cacheado
+            var authorResponse = _cacheService
+                .GetCachedResponse<Response<AuthorResponse>>(
+                    ApiRoutes.Authors.Get.Replace("{authorId}", 
+                    authorId.ToString()));
 
-            if (author == null)
-                return NotFound();
+            if (authorResponse == null)
+            {
+                var author = await _authorService
+                    .GetAuthorByIdAsync(authorId)
+                    .ConfigureAwait(false);
+                
+                if (author == null)
+                    return NotFound();
 
-            var authorResponse = new Response<AuthorResponse>(
-                _mapper.Map<AuthorResponse>(author));
+                authorResponse = new Response<AuthorResponse>(
+                    _mapper.Map<AuthorResponse>(author));
+
+                _cacheService.SetCacheResponse(ApiRoutes.Authors.Get.Replace("{authorId}",
+                    authorId.ToString()), authorResponse, 
+                    TimeSpan.FromMinutes(2));
+            }
 
             return Ok(authorResponse);
         }
@@ -154,4 +184,5 @@ namespace Medium.App.Controllers.V1
             return NotFound();
         }
     }
+#pragma warning restore CA1307 // Especificar StringComparison
 }

@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Medium.App.Controllers.V1
 {
+#pragma warning disable CA1307 // Especificar StringComparison
     /// <summary>
     /// Endpoint responsible for manage tags
     /// </summary>
@@ -28,14 +29,17 @@ namespace Medium.App.Controllers.V1
     public class TagsController : ControllerBase
     {
         private readonly ITagService _tagService;
+        private readonly ICacheService _cacheService;
         private readonly IUriService _uriService;
         private readonly IMapper _mapper;
 
-        public TagsController(ITagService tagService, 
-            IUriService uriService, IMapper mapper)
+        public TagsController(ITagService tagService,
+            IUriService uriService, IMapper mapper,
+            ICacheService cacheService)
         {
             _tagService = tagService;
             _uriService = uriService;
+            _cacheService = cacheService;
             _mapper = mapper;
         }
 
@@ -48,10 +52,23 @@ namespace Medium.App.Controllers.V1
         public async Task<IActionResult> GetAll([FromQuery] PaginationQuery paginationQuery)
         {
             var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
-            var tags = await _tagService
-                .GetTagsAsync(pagination)
-                .ConfigureAwait(false);
-            var tagsResponse = _mapper.Map<List<TagResponse>>(tags);
+            // Pegando tags cacheados
+            var tagsResponse = _cacheService
+                .GetCachedResponse<List<TagResponse>>(
+                    ApiRoutes.Tags.GetAll);
+
+            if (tagsResponse == null)
+            {
+                var tags = await _tagService
+                    .GetTagsAsync(pagination)
+                    .ConfigureAwait(false);
+                tagsResponse = _mapper.Map<List<TagResponse>>(tags);
+
+                _cacheService.SetCacheResponse(
+                    ApiRoutes.Tags.GetAll,
+                    tagsResponse,
+                    TimeSpan.FromMinutes(2));
+            }
 
             if (pagination == null || pagination.PageNumber < 1 || pagination.PageSize < 1)
             {
@@ -74,15 +91,28 @@ namespace Medium.App.Controllers.V1
         [ProducesResponseType(404)]
         public async Task<IActionResult> Get([FromRoute] Guid tagId)
         {
-            var tag = await _tagService
+            // Pegando tag cacheada
+            var tagResponse = _cacheService
+                .GetCachedResponse<Response<TagResponse>>(
+                    ApiRoutes.Tags.Get.Replace("{tagId}",
+                    tagId.ToString()));
+
+            if (tagResponse == null)
+            {
+                var tag = await _tagService
                 .GetTagByIdAsync(tagId)
                 .ConfigureAwait(false);
 
-            if (tag == null)
-                return NotFound();
+                if (tag == null)
+                    return NotFound();
 
-            var tagResponse = new Response<TagResponse>(
-                _mapper.Map<TagResponse>(tag));
+                tagResponse = new Response<TagResponse>(
+                    _mapper.Map<TagResponse>(tag));
+
+                _cacheService.SetCacheResponse(ApiRoutes.Tags.Get
+                    .Replace("{tagId}", tagId.ToString()), 
+                    tagResponse);
+            }
 
             return Ok(tagResponse);
         }
@@ -141,7 +171,7 @@ namespace Medium.App.Controllers.V1
                 return NotFound();
 
             tag.Name = request?.Name;
-            
+
             var updated = await _tagService
                 .UpdateTagAsync(tag)
                 .ConfigureAwait(false);
@@ -175,4 +205,5 @@ namespace Medium.App.Controllers.V1
             return NotFound();
         }
     }
+#pragma warning restore CA1307 // Especificar StringComparison
 }

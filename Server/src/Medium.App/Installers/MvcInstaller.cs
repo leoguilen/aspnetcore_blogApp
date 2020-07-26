@@ -23,6 +23,7 @@ namespace Medium.App.Installers
             services.AddControllers()
                 .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.AddMemoryCache();
 
             // Add versionamento da API
             services.AddApiVersioning(options =>
@@ -63,6 +64,7 @@ namespace Medium.App.Installers
             services.AddAuthorization();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<ICacheService, CacheService>();
             services.AddSingleton<IUriService>(provider =>
             {
                 var accessor = provider.GetRequiredService<IHttpContextAccessor>();
