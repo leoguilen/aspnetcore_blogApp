@@ -48,6 +48,9 @@ namespace Medium.UnitTest.Service
                         post1.Title.Should().Be("Post 1");
                         post1.Content.Should().Be("First post content");
                         post1.Attachments.Split(",").Should().HaveCount(2);
+                        post1.Author.Id.Should().Be(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"));
+                        post1.Author.FirstName.Should().Be("João");
+                        post1.Author.Email.Should().Be("joao@email.com");
                     },
                     post2 =>
                     {
@@ -55,6 +58,9 @@ namespace Medium.UnitTest.Service
                         post2.Title.Should().Be("Post 2");
                         post2.Content.Should().Be("Second post content");
                         post2.Attachments.Split(",").Should().HaveCount(2);
+                        post2.Author.Id.Should().Be(Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702"));
+                        post2.Author.FirstName.Should().Be("Maria");
+                        post2.Author.Email.Should().Be("maria@email.com");
                     });
         }
 
@@ -81,13 +87,20 @@ namespace Medium.UnitTest.Service
                 Id = Guid.Parse("a06ba60c-c999-4de3-aa23-4f0c13bd71ad"),
                 Title = "Post 2",
                 Content = "Second post content",
-                Attachments = "post2img1.jpg,post2img2.jpg"
+                Attachments = "post2img1.jpg,post2img2.jpg",
+                Author = new AuthorBuilder()
+                    .WithId(Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702"))
+                    .WithFirstName("Maria")
+                    .WithEmail("maria@email.com")
+                    .Build()
             };
 
             var post = await _postService.GetPostByIdAsync(postId);
 
-            expectedPost.Should().BeEquivalentTo(post, options =>
-                options.ExcludingMissingMembers());
+            expectedPost.Should().BeEquivalentTo(post, options => options
+                .Excluding(p => p.Author.Password)
+                .Excluding(p => p.Author.Salt)
+                .ExcludingMissingMembers());
         }
 
         #endregion
@@ -101,6 +114,7 @@ namespace Medium.UnitTest.Service
                 .WithTitle("Post 3")
                 .WithContent("New post created by xunit test")
                 .WithAttachments("log.txt,image.jpg")
+                .WithAuthor(Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702"))
                 .Build();
 
             var created = await _postService.CreatePostAsync(newPost);

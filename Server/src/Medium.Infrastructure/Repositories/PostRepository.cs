@@ -30,7 +30,9 @@ namespace Medium.Infrastructure.Repositories
         public async Task<IEnumerable<Post>> GetAllAsync()
         {
             var posts = await FindAllAsync();
-            return await posts.ToListAsync();
+            return await posts
+                .Include(p => p.Author)
+                .ToListAsync();
         }
 
         public async Task<Post> GetByIdAsync(Guid postId)
@@ -38,7 +40,9 @@ namespace Medium.Infrastructure.Repositories
             var post = await FindByConditionAsync(post =>
                 post.Id == postId);
 
-            return await post.SingleOrDefaultAsync();
+            return await post
+                .Include(p => p.Author)
+                .SingleOrDefaultAsync();
         }
 
         public async Task UpdatePostAsync(Post post)

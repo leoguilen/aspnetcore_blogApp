@@ -51,6 +51,9 @@ namespace Medium.IntegrationTest.Repositories
                         post1.Title.Should().Be("Post 1");
                         post1.Content.Should().Be("First post content");
                         post1.Attachments.Split(",").Should().HaveCount(2);
+                        post1.Author.Id.Should().Be(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"));
+                        post1.Author.FirstName.Should().Be("João");
+                        post1.Author.Email.Should().Be("joao@email.com");
                     },
                     post2 =>
                     {
@@ -58,6 +61,9 @@ namespace Medium.IntegrationTest.Repositories
                         post2.Title.Should().Be("Post 2");
                         post2.Content.Should().Be("Second post content");
                         post2.Attachments.Split(",").Should().HaveCount(2);
+                        post2.Author.Id.Should().Be(Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702"));
+                        post2.Author.FirstName.Should().Be("Maria");
+                        post2.Author.Email.Should().Be("maria@email.com");
                     });
         }
 
@@ -70,13 +76,20 @@ namespace Medium.IntegrationTest.Repositories
                 Id = Guid.Parse("b65afc54-d766-4377-8c89-22662582174e"),
                 Title = "Post 1",
                 Content = "First post content",
-                Attachments = "post1img1.jpg,post1img2.jpg"
+                Attachments = "post1img1.jpg,post1img2.jpg",
+                Author = new AuthorBuilder()
+                    .WithId(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"))
+                    .WithFirstName("João")
+                    .WithEmail("joao@email.com")
+                    .Build()
             };
 
             var post = await _postRepository.GetByIdAsync(postId);
 
-            expectedPost.Should().BeEquivalentTo(post, options =>
-                options.ExcludingMissingMembers());
+            expectedPost.Should().BeEquivalentTo(post, options => options
+                .Excluding(p => p.Author.Password)
+                .Excluding(p => p.Author.Salt)
+                .ExcludingMissingMembers());
         }
 
         [Fact]
@@ -88,6 +101,7 @@ namespace Medium.IntegrationTest.Repositories
                 .WithTitle(faker.Lorem.Paragraph())
                 .WithContent(faker.Lorem.Text())
                 .WithAttachments(faker.Image.PicsumUrl())
+                .WithAuthor(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"))
                 .Build();
 
             await _postRepository.CreatePostAsync(newPost);
@@ -98,8 +112,11 @@ namespace Medium.IntegrationTest.Repositories
 
             var createdPost = await _postRepository.GetByIdAsync(newPost.Id);
 
-            newPost.Should().BeEquivalentTo(createdPost, options =>
-                options.ExcludingMissingMembers());
+            newPost.Should().BeEquivalentTo(createdPost, options => options
+                .Excluding(p => p.Author)
+                .ExcludingMissingMembers());
+            createdPost.Author.FirstName.Should().Be("João");
+            createdPost.Author.Email.Should().Be("joao@email.com");
             createdPost.CreatedAt.Should().Be(DateTime.Now.DefaultFormat());
             createdPost.UpdatedAt.Should().Be(DateTime.Now.DefaultFormat());
         }
