@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Medium.App.Extensions;
 using Medium.Core.Common.Builder;
 using Medium.Core.Contracts.V1;
 using Medium.Core.Contracts.V1.Request.Post;
@@ -140,6 +141,7 @@ namespace Medium.App.Controllers.V1
                 .WithTitle(request?.Title)
                 .WithContent(request?.Content)
                 .WithAttachments(request?.Attachments)
+                .WithAuthor(HttpContext.GetUserId())
                 .Build();
 
             await _postService

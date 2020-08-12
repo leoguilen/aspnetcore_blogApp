@@ -48,7 +48,8 @@ namespace Medium.IntegrationTest.Controllers.PostControllerTest
                         Id = validId,
                         Title = "Post 1",
                         Content = "First post content",
-                        Attachments = "post1img1.jpg,post1img2.jpg"
+                        Attachments = "post1img1.jpg,post1img2.jpg",
+                        AuthorId = Guid.Parse("d4182477-0823-4908-be1d-af808e594306")
                     });
 
             await AuthenticateAsync();

@@ -5,6 +5,7 @@ using Medium.Core.Contracts.V1.Request.Post;
 using Medium.Core.Contracts.V1.Response;
 using Medium.Core.Contracts.V1.Response.Post;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace Medium.IntegrationTest.Controllers.PostControllerTest
             {
                 Title = _faker.Random.String2(50),
                 Content = _faker.Lorem.Text(),
-                Attachments = _faker.Image.PicsumUrl()
+                Attachments = _faker.Image.PicsumUrl(),
             };
         }
 
@@ -77,7 +78,8 @@ namespace Medium.IntegrationTest.Controllers.PostControllerTest
                     {
                         Title = _createPostRequest.Title,
                         Content = _createPostRequest.Content,
-                        Attachments = _createPostRequest.Attachments
+                        Attachments = _createPostRequest.Attachments,
+                        AuthorId = Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702")
                     }), x => x.ExcludingMissingMembers());
         }
     }

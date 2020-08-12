@@ -43,6 +43,7 @@ namespace Medium.IntegrationTest.Controllers.PostControllerTest
                         post1.Title.Should().Be("Post 1");
                         post1.Content.Should().Be("First post content");
                         post1.Attachments.Should().Be("post1img1.jpg,post1img2.jpg");
+                        post1.AuthorId.Should().Be(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"));
                     },
                     post2 =>
                     {
@@ -50,6 +51,7 @@ namespace Medium.IntegrationTest.Controllers.PostControllerTest
                         post2.Title.Should().Be("Post 2");
                         post2.Content.Should().Be("Second post content");
                         post2.Attachments.Should().Be("post2img1.jpg,post2img2.jpg");
+                        post2.AuthorId.Should().Be(Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702"));
                     });
         }
     }
