@@ -20,7 +20,8 @@ namespace Medium.Infrastructure.Data.Context.Configuration
                     Id = Guid.NewGuid(),
                     Title = "Post Example",
                     Content = "Post added in migration",
-                    Attachments = string.Empty
+                    Attachments = string.Empty,
+                    AuthorId = Guid.Parse("4f29ee19-ea4b-421d-a796-c2ee446becd2")
                 }
             );
         }

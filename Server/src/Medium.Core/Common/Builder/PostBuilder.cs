@@ -36,6 +36,12 @@ namespace Medium.Core.Common.Builder
             return this;
         }
 
+        public PostBuilder WithAuthor(Guid authorId)
+        {
+            _post.AuthorId = authorId;
+            return this;
+        }
+
         public Post Build() => _post;
     }
 }

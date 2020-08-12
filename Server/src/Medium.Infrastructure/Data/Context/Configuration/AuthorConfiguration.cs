@@ -18,9 +18,9 @@ namespace Medium.Infrastructure.Data.Context.Configuration
 
             builder.HasData
             (
-                new Author 
+                new Author
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("4f29ee19-ea4b-421d-a796-c2ee446becd2"),
                     FirstName = "Administrador",
                     LastName = "Master",
                     Username = "admin.master",
