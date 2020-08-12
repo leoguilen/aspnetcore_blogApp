@@ -10,7 +10,7 @@ namespace Medium.IntegrationTest.Controllers.PostControllerTest
     public class DeleteTest : ControllersTest
     {
         private readonly string _requestUri = ApiRoutes.Posts.Delete;
-        
+
         public DeleteTest(CustomWebApplicationFactory factory)
             : base(factory) { }
 

@@ -1,6 +1,6 @@
-using System;
 using Medium.Core.Common.Extension;
 using Medium.Core.Domain;
+using System;
 
 public class Tag : BaseEntity
 {

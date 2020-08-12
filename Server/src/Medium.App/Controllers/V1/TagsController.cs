@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Medium.Core.Common.Builder;
 using Medium.Core.Contracts.V1;
@@ -15,6 +11,10 @@ using Medium.Core.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Medium.App.Controllers.V1
 {
@@ -110,7 +110,7 @@ namespace Medium.App.Controllers.V1
                     _mapper.Map<TagResponse>(tag));
 
                 _cacheService.SetCacheResponse(ApiRoutes.Tags.Get
-                    .Replace("{tagId}", tagId.ToString()), 
+                    .Replace("{tagId}", tagId.ToString()),
                     tagResponse);
             }
 

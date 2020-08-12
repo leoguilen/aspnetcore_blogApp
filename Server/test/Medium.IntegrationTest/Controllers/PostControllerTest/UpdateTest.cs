@@ -95,7 +95,7 @@ namespace Medium.IntegrationTest.Controllers.PostControllerTest
                         Id = _requestId,
                         Title = _updatePostRequest.Title,
                         Content = _updatePostRequest.Content,
-                        Attachments= _updatePostRequest.Attachments
+                        Attachments = _updatePostRequest.Attachments
                     }), x => x.ExcludingMissingMembers());
         }
     }

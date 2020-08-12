@@ -53,7 +53,7 @@ namespace Medium.App
                 foreach (var description in provider.ApiVersionDescriptions)
                 {
                     sw.RoutePrefix = "";
-                    sw.SwaggerEndpoint($"/{description.GroupName}/swagger.json", 
+                    sw.SwaggerEndpoint($"/{description.GroupName}/swagger.json",
                         description.GroupName.ToUpperInvariant());
                 }
             });

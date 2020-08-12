@@ -3,7 +3,6 @@ using FluentAssertions;
 using Medium.Core.Common.Builder;
 using Medium.Core.Domain;
 using Medium.Core.Options;
-using Medium.Core.Repositories;
 using Medium.Core.Services;
 using Medium.Core.UnitOfWork;
 using Medium.Infrastructure.Data.Context;

@@ -1,10 +1,10 @@
+using Medium.Core.Domain;
+using Medium.Core.Services;
+using Medium.Core.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Medium.Core.Domain;
-using Medium.Core.Services;
-using Medium.Core.UnitOfWork;
 
 namespace Medium.Infrastructure.Services
 {

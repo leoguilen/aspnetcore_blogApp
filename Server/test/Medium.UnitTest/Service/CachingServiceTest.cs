@@ -95,7 +95,7 @@ namespace Medium.UnitTest.Service
             var newValues = new[] { "valor10", "valor20" };
 
             // Salvando valores no cache
-            _cacheService.SetCacheResponse(key, 
+            _cacheService.SetCacheResponse(key,
                 newValues, TimeSpan.FromMinutes(5));
 
             var cacheResponse = _cacheService

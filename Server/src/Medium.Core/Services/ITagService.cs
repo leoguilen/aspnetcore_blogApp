@@ -1,7 +1,7 @@
+using Medium.Core.Domain;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Medium.Core.Domain;
 
 namespace Medium.Core.Services
 {

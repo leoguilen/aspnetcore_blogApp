@@ -21,6 +21,9 @@ namespace Medium.Core.Common.Builder
             _tag.Name = name;
             return this;
         }
-        public Tag Build() => _tag;
+        public Tag Build()
+        {
+            return _tag;
+        }
     }
 }

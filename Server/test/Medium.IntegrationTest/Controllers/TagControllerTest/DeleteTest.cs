@@ -11,8 +11,8 @@ namespace Medium.IntegrationTest.Controllers.TagControllerTest
     {
         private readonly string _requestUri = ApiRoutes.Tags.Delete;
 
-        public DeleteTest(CustomWebApplicationFactory factory) 
-            : base(factory) {}
+        public DeleteTest(CustomWebApplicationFactory factory)
+            : base(factory) { }
 
         [Fact]
         public async Task ShouldBeReturned_NotFoundResponse_IfTagIdNotExists()

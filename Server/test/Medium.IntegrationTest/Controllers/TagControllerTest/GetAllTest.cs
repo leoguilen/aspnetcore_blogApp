@@ -3,10 +3,8 @@ using Medium.Core.Contracts.V1;
 using Medium.Core.Contracts.V1.Response;
 using Medium.Core.Contracts.V1.Response.Tag;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -18,7 +16,7 @@ namespace Medium.IntegrationTest.Controllers.TagControllerTest
         private readonly string _requestUri = ApiRoutes.Tags.GetAll;
         private readonly ITestOutputHelper _output;
 
-        public GetAllTest(CustomWebApplicationFactory factory, 
+        public GetAllTest(CustomWebApplicationFactory factory,
             ITestOutputHelper output) : base(factory)
         {
             _output = output;

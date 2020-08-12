@@ -41,9 +41,9 @@ namespace Medium.IntegrationTest.Controllers.AuthorControllerTest
         public async Task ShouldBeReturned_AuthorResponse_IfAuthorIdExistsInDatabase()
         {
             var validId = Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702");
-            var expectedAuthorResponse = 
+            var expectedAuthorResponse =
                 new Response<AuthorResponse>(
-                    new AuthorResponse 
+                    new AuthorResponse
                     {
                         Id = validId,
                         FirstName = "Maria",
@@ -53,7 +53,7 @@ namespace Medium.IntegrationTest.Controllers.AuthorControllerTest
             await AuthenticateAsync();
 
             var response = await HttpClientTest.GetAsync(
-                _requestUri.Replace("{authorId}", 
+                _requestUri.Replace("{authorId}",
                     validId.ToString()));
 
             _output.WriteLine($"Response: {await response.Content.ReadAsStringAsync()}");
@@ -62,7 +62,7 @@ namespace Medium.IntegrationTest.Controllers.AuthorControllerTest
             (await response.Content.ReadAsAsync<Response<AuthorResponse>>())
                 .Data.Should()
                 .NotBeNull().And
-                .BeEquivalentTo(expectedAuthorResponse, 
+                .BeEquivalentTo(expectedAuthorResponse,
                     x => x.ExcludingMissingMembers());
         }
     }

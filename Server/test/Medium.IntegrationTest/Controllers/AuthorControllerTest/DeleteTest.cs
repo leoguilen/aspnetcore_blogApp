@@ -13,7 +13,7 @@ namespace Medium.IntegrationTest.Controllers.AuthorControllerTest
         private readonly string _requestUri = ApiRoutes.Authors.Delete;
         private readonly ITestOutputHelper _output;
 
-        public DeleteTest(CustomWebApplicationFactory factory, 
+        public DeleteTest(CustomWebApplicationFactory factory,
             ITestOutputHelper output) : base(factory)
         {
             _output = output;
@@ -27,7 +27,7 @@ namespace Medium.IntegrationTest.Controllers.AuthorControllerTest
             var randomId = Guid.NewGuid().ToString();
 
             var response = await HttpClientTest.DeleteAsync(
-                _requestUri.Replace("{authorId}",randomId));
+                _requestUri.Replace("{authorId}", randomId));
 
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }

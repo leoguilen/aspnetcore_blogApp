@@ -40,7 +40,7 @@ namespace Medium.IntegrationTest.Controllers.AuthenticationsControllerTest
             _authorResetPasswordRequest.Email = _faker.Person.Email;
 
             var response = await HttpClientTest
-                .PostAsJsonAsync(_requestUri, 
+                .PostAsJsonAsync(_requestUri,
                     _authorResetPasswordRequest);
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);

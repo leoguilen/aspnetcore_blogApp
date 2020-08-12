@@ -11,9 +11,9 @@ namespace Medium.App.Validators
             RuleFor(x => x.FirstName)
                 .NotEmpty()
                 .MinimumLength(4)
-                .Must(first => 
+                .Must(first =>
                     Regex.IsMatch(first, @"^[A-Z][a-zA-Z]*$"));
-            
+
             RuleFor(x => x.LastName)
                 .NotEmpty()
                 .MinimumLength(4)

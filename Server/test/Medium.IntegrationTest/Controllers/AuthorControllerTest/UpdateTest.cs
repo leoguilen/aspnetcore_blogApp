@@ -24,7 +24,7 @@ namespace Medium.IntegrationTest.Controllers.AuthorControllerTest
         private readonly UpdateAuthorRequest _updateAuthorRequest;
         private readonly Faker _faker;
 
-        public UpdateTest(CustomWebApplicationFactory factory, 
+        public UpdateTest(CustomWebApplicationFactory factory,
             ITestOutputHelper output) : base(factory)
         {
             _faker = new Faker("pt_BR");
@@ -85,7 +85,7 @@ namespace Medium.IntegrationTest.Controllers.AuthorControllerTest
             await AuthenticateAsync();
 
             var response = await HttpClientTest.PutAsJsonAsync(
-                _requestUri.Replace("{authorId}", _requestId.ToString()), 
+                _requestUri.Replace("{authorId}", _requestId.ToString()),
                     _updateAuthorRequest);
 
             _output.WriteLine($"Response: {await response.Content.ReadAsStringAsync()}");
@@ -93,7 +93,7 @@ namespace Medium.IntegrationTest.Controllers.AuthorControllerTest
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             (await response.Content.ReadAsAsync<Response<AuthorResponse>>())
                 .Data.Should().BeEquivalentTo(new Response<AuthorResponse>(
-                    new AuthorResponse 
+                    new AuthorResponse
                     {
                         Id = _requestId,
                         FirstName = _updateAuthorRequest.FirstName,

@@ -39,7 +39,7 @@ namespace Medium.App.Installers
                     }
                 };
 
-                x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme 
+                x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"JWT Authorization header using the Bearer scheme. 
                       Enter 'Bearer' [space] and then your token in the text input below.

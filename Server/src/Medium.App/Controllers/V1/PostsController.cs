@@ -33,8 +33,8 @@ namespace Medium.App.Controllers.V1
         private readonly IUriService _uriService;
         private readonly IMapper _mapper;
 
-        public PostsController(IPostService postService, 
-            IUriService uriService, IMapper mapper, 
+        public PostsController(IPostService postService,
+            IUriService uriService, IMapper mapper,
             ICacheService cacheService)
         {
             _postService = postService;
@@ -56,8 +56,8 @@ namespace Medium.App.Controllers.V1
             var postsResponse = _cacheService
                 .GetCachedResponse<List<PostResponse>>(
                     ApiRoutes.Posts.GetAll);
-            
-            if(postsResponse == null)
+
+            if (postsResponse == null)
             {
                 var posts = await _postService
                     .GetPostsAsync(pagination)
@@ -65,8 +65,8 @@ namespace Medium.App.Controllers.V1
                 postsResponse = _mapper.Map<List<PostResponse>>(posts);
 
                 _cacheService.SetCacheResponse(
-                    ApiRoutes.Posts.GetAll, 
-                    postsResponse, 
+                    ApiRoutes.Posts.GetAll,
+                    postsResponse,
                     TimeSpan.FromMinutes(2));
             }
 
@@ -94,10 +94,10 @@ namespace Medium.App.Controllers.V1
             // Pegando post cacheado
             var postResponse = _cacheService
                 .GetCachedResponse<Response<PostResponse>>(
-                    ApiRoutes.Posts.Get.Replace("{postId}", 
+                    ApiRoutes.Posts.Get.Replace("{postId}",
                     postId.ToString()));
 
-            if(postResponse == null)
+            if (postResponse == null)
             {
                 var post = await _postService
                     .GetPostByIdAsync(postId)
@@ -110,7 +110,7 @@ namespace Medium.App.Controllers.V1
                     _mapper.Map<PostResponse>(post));
 
                 _cacheService.SetCacheResponse(ApiRoutes.Posts.Get
-                    .Replace("{postId}", postId.ToString()), 
+                    .Replace("{postId}", postId.ToString()),
                     postResponse);
             }
 

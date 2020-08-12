@@ -93,7 +93,7 @@ namespace Medium.App.Controllers.V1
             // Pegando autor cacheado
             var authorResponse = _cacheService
                 .GetCachedResponse<Response<AuthorResponse>>(
-                    ApiRoutes.Authors.Get.Replace("{authorId}", 
+                    ApiRoutes.Authors.Get.Replace("{authorId}",
                     authorId.ToString()));
 
             if (authorResponse == null)
@@ -101,7 +101,7 @@ namespace Medium.App.Controllers.V1
                 var author = await _authorService
                     .GetAuthorByIdAsync(authorId)
                     .ConfigureAwait(false);
-                
+
                 if (author == null)
                     return NotFound();
 
@@ -109,7 +109,7 @@ namespace Medium.App.Controllers.V1
                     _mapper.Map<AuthorResponse>(author));
 
                 _cacheService.SetCacheResponse(ApiRoutes.Authors.Get.Replace("{authorId}",
-                    authorId.ToString()), authorResponse, 
+                    authorId.ToString()), authorResponse,
                     TimeSpan.FromMinutes(2));
             }
 

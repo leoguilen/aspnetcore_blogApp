@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Medium.Core.Common.Builder;
 using Medium.Core.Common.Extension;
@@ -11,6 +9,8 @@ using Medium.IntegrationTest;
 using Medium.IntegrationTest.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Medium.UnitTest.Service
@@ -20,7 +20,7 @@ namespace Medium.UnitTest.Service
         private readonly IUnitOfWork _unit;
         private readonly ITagService _tagService;
         private readonly DataContext _dbContext;
-    
+
         public TagServiceTest()
         {
             var provider = ServicesConfiguration.Configure();
@@ -31,7 +31,7 @@ namespace Medium.UnitTest.Service
             _unit = provider.GetRequiredService<IUnitOfWork>();
             _tagService = new TagService(_unit);
         }
-    
+
         #region Get All Tags
 
         [Fact]

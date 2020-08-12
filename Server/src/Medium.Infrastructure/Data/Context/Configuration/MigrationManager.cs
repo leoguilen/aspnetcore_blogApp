@@ -14,6 +14,6 @@ namespace Medium.Infrastructure.Data.Context.Configuration
             appContext.Database.Migrate();
 
             return host;
-        } 
+        }
     }
 }

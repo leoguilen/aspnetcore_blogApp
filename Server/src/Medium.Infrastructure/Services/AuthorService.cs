@@ -47,7 +47,7 @@ namespace Medium.Infrastructure.Services
 
         public async Task<IEnumerable<Author>> GetAuthorsAsync(PaginationFilter paginationFilter = null)
         {
-            if(paginationFilter == null)
+            if (paginationFilter == null)
             {
                 return await _unitOfWork.Authors.GetAllAsync();
             }

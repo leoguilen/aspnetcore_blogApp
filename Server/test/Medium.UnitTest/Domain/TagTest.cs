@@ -1,8 +1,8 @@
-using System;
 using Bogus;
 using FluentAssertions;
 using Medium.Core.Common.Builder;
 using Medium.Core.Common.Extension;
+using System;
 using Xunit;
 
 namespace Medium.UnitTest.Domain

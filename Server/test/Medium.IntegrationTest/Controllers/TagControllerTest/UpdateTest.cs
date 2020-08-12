@@ -24,7 +24,7 @@ namespace Medium.IntegrationTest.Controllers.TagControllerTest
         private readonly UpdateTagRequest _updateTagRequest;
         private readonly Faker _faker;
 
-        public UpdateTest(CustomWebApplicationFactory factory, 
+        public UpdateTest(CustomWebApplicationFactory factory,
             ITestOutputHelper output) : base(factory)
         {
             _faker = new Faker("pt_BR");

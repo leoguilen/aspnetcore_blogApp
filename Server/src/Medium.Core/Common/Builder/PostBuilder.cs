@@ -42,6 +42,9 @@ namespace Medium.Core.Common.Builder
             return this;
         }
 
-        public Post Build() => _post;
+        public Post Build()
+        {
+            return _post;
+        }
     }
 }

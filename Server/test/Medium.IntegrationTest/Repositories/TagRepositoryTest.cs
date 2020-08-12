@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Bogus;
+﻿using Bogus;
 using FluentAssertions;
 using Medium.Core.Common.Builder;
 using Medium.Core.Common.Extension;
@@ -11,6 +8,9 @@ using Medium.Infrastructure.Repositories;
 using Medium.IntegrationTest.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Medium.IntegrationTest.Repositories
@@ -29,7 +29,7 @@ namespace Medium.IntegrationTest.Repositories
                 .SeedTestData();
             _tagRepository = new TagRepository(_inMemoryDbContext);
         }
-        
+
         [Fact]
         public void ShouldCanConnectInMemoryDatabase()
         {
@@ -90,8 +90,8 @@ namespace Medium.IntegrationTest.Repositories
 
             var createdTag = await _tagRepository.GetByIdAsync(newTag.Id);
 
-           newTag.Should().BeEquivalentTo(createdTag, options =>
-                options.ExcludingMissingMembers());
+            newTag.Should().BeEquivalentTo(createdTag, options =>
+                 options.ExcludingMissingMembers());
             createdTag.CreatedAt.Should().Be(DateTime.Now.DefaultFormat());
             createdTag.UpdatedAt.Should().Be(DateTime.Now.DefaultFormat());
         }

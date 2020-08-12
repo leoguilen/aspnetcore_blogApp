@@ -38,7 +38,7 @@ namespace Medium.IntegrationTest.Controllers.TagControllerTest
         {
             await AuthenticateAsync();
 
-            _createTagRequest.Name = _faker.Random.String2(0,3);
+            _createTagRequest.Name = _faker.Random.String2(0, 3);
 
             var response = await HttpClientTest
                 .PostAsJsonAsync(_requestUri,
