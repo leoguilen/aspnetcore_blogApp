@@ -1,3 +1,4 @@
+using Medium.Core.Domain;
 using Medium.Core.Repositories;
 using Medium.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,9 @@ namespace Medium.Infrastructure.Repositories
         public async Task<IEnumerable<Tag>> GetAllAsync()
         {
             var tags = await FindAllAsync();
-            return await tags.ToListAsync();
+            return await tags
+                .Include(t => t.Author)
+                .ToListAsync();
         }
 
         public async Task<Tag> GetByIdAsync(Guid tagId)
@@ -37,7 +40,9 @@ namespace Medium.Infrastructure.Repositories
             var tag = await FindByConditionAsync(tag =>
                 tag.Id == tagId);
 
-            return await tag.SingleOrDefaultAsync();
+            return await tag
+                .Include(t => t.Author)
+                .SingleOrDefaultAsync();
         }
 
         public async Task UpdateTagAsync(Tag tag)

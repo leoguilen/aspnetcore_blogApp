@@ -1,3 +1,4 @@
+using Medium.Core.Domain;
 using System;
 
 namespace Medium.Core.Common.Builder
@@ -21,6 +22,13 @@ namespace Medium.Core.Common.Builder
             _tag.Name = name;
             return this;
         }
+
+        public TagBuilder WithAuthor(Guid authorId)
+        {
+            _tag.AuthorId = authorId;
+            return this;
+        }
+
         public Tag Build()
         {
             return _tag;

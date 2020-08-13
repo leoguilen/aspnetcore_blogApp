@@ -46,11 +46,17 @@ namespace Medium.UnitTest.Service
                     {
                         tag1.Id.Should().Be(Guid.Parse("5d5e9a28-7c3e-4c2a-8098-b866eab33e61"));
                         tag1.Name.Should().Be("Tag_1");
+                        tag1.Author.Id.Should().Be(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"));
+                        tag1.Author.FirstName.Should().Be("João");
+                        tag1.Author.Email.Should().Be("joao@email.com");
                     },
                     tag2 =>
                     {
                         tag2.Id.Should().Be(Guid.Parse("d94e6e00-96d0-4fc7-b621-c7746705b471"));
                         tag2.Name.Should().Be("Tag_2");
+                        tag2.Author.Id.Should().Be(Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702"));
+                        tag2.Author.FirstName.Should().Be("Maria");
+                        tag2.Author.Email.Should().Be("maria@email.com");
                     });
         }
 
@@ -75,13 +81,16 @@ namespace Medium.UnitTest.Service
             var expectedTag = new
             {
                 Id = Guid.Parse("d94e6e00-96d0-4fc7-b621-c7746705b471"),
-                Name = "Tag_2"
+                Name = "Tag_2",
+                AuthorId = Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702")
             };
 
             var tag = await _tagService.GetTagByIdAsync(tagId);
 
             expectedTag.Should().BeEquivalentTo(tag, options =>
                 options.ExcludingMissingMembers());
+            tag.Author.FirstName.Should().Be("Maria");
+            tag.Author.Email.Should().Be("maria@email.com");
         }
 
         #endregion
@@ -94,6 +103,7 @@ namespace Medium.UnitTest.Service
             var newTag = new TagBuilder()
                 .WithId(Guid.NewGuid())
                 .WithName("Tag_3")
+                .WithAuthor(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"))
                 .Build();
 
             var created = await _tagService.CreateTagAsync(newTag);

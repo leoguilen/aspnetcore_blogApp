@@ -6,5 +6,6 @@ namespace Medium.Core.Contracts.V1.Response.Tag
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public Guid AuthorId { get; set; }
     }
 }

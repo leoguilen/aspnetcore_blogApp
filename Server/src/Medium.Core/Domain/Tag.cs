@@ -1,13 +1,21 @@
 using Medium.Core.Common.Extension;
-using Medium.Core.Domain;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
-public class Tag : BaseEntity
+namespace Medium.Core.Domain
 {
-    public string Name { get; set; }
-    public Tag()
+    public class Tag : BaseEntity
     {
-        CreatedAt = DateTime.Now.DefaultFormat();
-        UpdatedAt = DateTime.Now.DefaultFormat();
+        public string Name { get; set; }
+        public Guid AuthorId { get; set; }
+
+        [ForeignKey(nameof(AuthorId))]
+        public Author Author { get; set; }
+
+        public Tag()
+        {
+            CreatedAt = DateTime.Now.DefaultFormat();
+            UpdatedAt = DateTime.Now.DefaultFormat();
+        }
     }
 }

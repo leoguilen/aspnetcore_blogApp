@@ -49,11 +49,17 @@ namespace Medium.IntegrationTest.Repositories
                     {
                         tag1.Id.Should().Be(Guid.Parse("5d5e9a28-7c3e-4c2a-8098-b866eab33e61"));
                         tag1.Name.Should().Be("Tag_1");
+                        tag1.Author.Id.Should().Be(Guid.Parse("d4182477-0823-4908-be1d-af808e594306"));
+                        tag1.Author.FirstName.Should().Be("João");
+                        tag1.Author.Email.Should().Be("joao@email.com");
                     },
                     tag2 =>
                     {
                         tag2.Id.Should().Be(Guid.Parse("d94e6e00-96d0-4fc7-b621-c7746705b471"));
                         tag2.Name.Should().Be("Tag_2");
+                        tag2.Author.Id.Should().Be(Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702"));
+                        tag2.Author.FirstName.Should().Be("Maria");
+                        tag2.Author.Email.Should().Be("maria@email.com");
                     });
         }
 
@@ -64,13 +70,16 @@ namespace Medium.IntegrationTest.Repositories
             var expectedTag = new
             {
                 Id = Guid.Parse("5d5e9a28-7c3e-4c2a-8098-b866eab33e61"),
-                Name = "Tag_1"
+                Name = "Tag_1",
+                AuthorId = Guid.Parse("d4182477-0823-4908-be1d-af808e594306")
             };
 
             var tag = await _tagRepository.GetByIdAsync(tagId);
 
             expectedTag.Should().BeEquivalentTo(tag, options =>
                 options.ExcludingMissingMembers());
+            tag.Author.FirstName.Should().Be("João");
+            tag.Author.Email.Should().Be("joao@email.com");
         }
 
         [Fact]
@@ -80,6 +89,7 @@ namespace Medium.IntegrationTest.Repositories
             var newTag = new TagBuilder()
                 .WithId(Guid.NewGuid())
                 .WithName(faker.Random.String2(8))
+                .WithAuthor(Guid.Parse("9ab3d110-71e1-418f-86eb-519146e7d702"))
                 .Build();
 
             await _tagRepository.CreateTagAsync(newTag);
@@ -90,8 +100,11 @@ namespace Medium.IntegrationTest.Repositories
 
             var createdTag = await _tagRepository.GetByIdAsync(newTag.Id);
 
-            newTag.Should().BeEquivalentTo(createdTag, options =>
-                 options.ExcludingMissingMembers());
+            newTag.Should().BeEquivalentTo(createdTag, options => options
+                .Excluding(p => p.Author)
+                .ExcludingMissingMembers());
+            createdTag.Author.FirstName.Should().Be("Maria");
+            createdTag.Author.Email.Should().Be("maria@email.com");
             createdTag.CreatedAt.Should().Be(DateTime.Now.DefaultFormat());
             createdTag.UpdatedAt.Should().Be(DateTime.Now.DefaultFormat());
         }

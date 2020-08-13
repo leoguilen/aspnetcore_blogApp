@@ -1,4 +1,5 @@
 using AutoMapper;
+using Medium.App.Extensions;
 using Medium.Core.Common.Builder;
 using Medium.Core.Contracts.V1;
 using Medium.Core.Contracts.V1.Request.Queries;
@@ -138,6 +139,7 @@ namespace Medium.App.Controllers.V1
 
             var newTag = new TagBuilder()
                 .WithName(request?.Name)
+                .WithAuthor(HttpContext.GetUserId())
                 .Build();
 
             await _tagService
