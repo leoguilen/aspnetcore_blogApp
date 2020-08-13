@@ -17,7 +17,7 @@ namespace Medium.Infrastructure.Data.Context.Configuration
             (
                 new Post
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("040b026e-df88-4753-b96a-1fbc18498c9d"),
                     Title = "Post Example",
                     Content = "Post added in migration",
                     Attachments = string.Empty,

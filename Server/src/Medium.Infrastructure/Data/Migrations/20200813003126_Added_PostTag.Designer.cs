@@ -4,14 +4,16 @@ using Medium.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Medium.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200813003126_Added_PostTag")]
+    partial class Added_PostTag
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,14 +134,14 @@ namespace Medium.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Medium.Core.Domain.PostTag", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("PostId", "TagId");
@@ -151,9 +153,9 @@ namespace Medium.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("496606b5-78b7-4a7a-9fa3-44458bbbd0f8"),
                             PostId = new Guid("040b026e-df88-4753-b96a-1fbc18498c9d"),
-                            TagId = new Guid("02ce73a0-768d-4ef3-8347-1fcf9522ee55")
+                            TagId = new Guid("02ce73a0-768d-4ef3-8347-1fcf9522ee55"),
+                            Id = new Guid("496606b5-78b7-4a7a-9fa3-44458bbbd0f8")
                         });
                 });
 
