@@ -7,15 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{75B16FC5-7B0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{5609EA67-F220-405D-AAFE-23D177BB8D04}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Medium.App", "src\Medium.App\Medium.App.csproj", "{7A228B1A-E2F6-47D8-BC18-61EC14903FC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.App", "src\Blog.App\Blog.App.csproj", "{7A228B1A-E2F6-47D8-BC18-61EC14903FC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medium.IntegrationTest", "test\Medium.IntegrationTest\Medium.IntegrationTest.csproj", "{0C3B5F92-7A15-4E4E-846B-FBE26724FD85}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.IntegrationTest", "test\Blog.IntegrationTest\Blog.IntegrationTest.csproj", "{0C3B5F92-7A15-4E4E-846B-FBE26724FD85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medium.UnitTest", "test\Medium.UnitTest\Medium.UnitTest.csproj", "{0A507B2C-4AAD-4BFD-9C30-2A7694BD898D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.UnitTest", "test\Blog.UnitTest\Blog.UnitTest.csproj", "{0A507B2C-4AAD-4BFD-9C30-2A7694BD898D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medium.Core", "src\Medium.Core\Medium.Core.csproj", "{797CACBB-A324-4DAC-AFF5-5A9BBDAB0A68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Core", "src\Blog.Core\Blog.Core.csproj", "{797CACBB-A324-4DAC-AFF5-5A9BBDAB0A68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medium.Infrastructure", "src\Medium.Infrastructure\Medium.Infrastructure.csproj", "{B00F5B39-1563-49FC-9077-6F969EB2B326}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Infrastructure", "src\Blog.Infrastructure\Blog.Infrastructure.csproj", "{B00F5B39-1563-49FC-9077-6F969EB2B326}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
