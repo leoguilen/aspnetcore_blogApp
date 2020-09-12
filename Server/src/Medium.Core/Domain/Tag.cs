@@ -10,7 +10,7 @@ namespace Medium.Core.Domain
         public Guid AuthorId { get; set; }
 
         [ForeignKey(nameof(AuthorId))]
-        public Author Author { get; set; }
+        public virtual Author Author { get; set; }
 
         public Tag()
         {

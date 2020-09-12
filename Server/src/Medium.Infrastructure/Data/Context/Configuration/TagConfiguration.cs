@@ -12,7 +12,7 @@ namespace Medium.Infrastructure.Data.Context.Configuration
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.Name).IsRequired(false);
             builder.HasIndex(x => x.Name).IsUnique();
-            
+
             builder.HasData
             (
                 new Tag
