@@ -22,6 +22,6 @@ jobs:
     - name: Build
       run: dotnet build .//Server// --configuration Release --no-restore
     - name: Unit Test
-      run: dotnet test .//Server//test//Medium.UnitTest// --no-restore --verbosity normal
+      run: dotnet test .//Server//test//Blog.UnitTest// --no-restore --verbosity normal
     - name: Integration Test
-      run: dotnet test .//Server//test//Medium.IntegrationTest// --no-restore --verbosity normal
+      run: dotnet test .//Server//test//Blog.IntegrationTest// --no-restore --verbosity normal
